@@ -226,23 +226,167 @@ Let A = 0x07F5 which needs 2 byte -> 64 bit
 	
 ### Arithmetic Instruction sets:
 
-  	INC/DEC destination
-  		Examples:
-			INC ebx 	; Increments 32-bit register
-			INC DL		; Increments 8-bit register
-			INC [count]	; Increments the count variable
-	
-	
-	ADD/SUB destination, source
-	
-	MUL/IMUL multiplier
+```
+INC destination
+DEC destination
+	Examples:
+		INC ebx 	; Increments 32-bit register
+		INC DL		; Increments 8-bit register
+		INC [count]	; Increments the count variable
+
+
+ADD destination, source
+SUB destination, source
+
+MUL multiplier
+IMUL multiplier
+
+DIV divisor
+IDIV divisor
+```
   
+### Logical Instruction sets:
+
+```
+AND operand1, operand2
+OR operand1, operand2
+XOR operand1, operand2
+TEST operand1, operand2
+NOT operand1
+```
+
+### Conditions:
+```
+CMP DX,	00  ; Compare the DX value with zero
+JE  L7      ; Jump if equal, to label L7
+.
+.
+L7: ...  
+
+INC	EDX
+CMP	EDX, 10	; Compares whether the counter has reached 10
+JLE	LP1     ; Jump if less than or equal to 10,  to label LP1
+.
+.
+LP1: ...
+
+JMP LP2		; Jump unconditionally to label LP2
+.
+.
+LP2: ...
+```
+
+### Loops:
+- ECX register contains the loop count
+- JMP instruction can be used for implementing loops
+- Following code snippet execute loop for 10 times
+
+```
+MOV	CL, 10
+L1:
+DEC	CL			; decrement CL by 1
+JNZ	L1			; Jump if not zero, to label L1
 
 
+; Following implementation does the same thing using LOOP instruction
+MOV	ECX, 10
+L1:
+DEC	ECX
+LOOP L1
+```
+
+### Numbers:
+ - represented in binary system
+ - arithmetic instructions operate on binary data
+ - while displaying to screen they are converted to ASCII form
+
+[Todo: I have a feeling that currently this topic is not that important to know in detail. I will be mostly busy with processing strings. I will comeback with this topic later]
+
+### Strings:
+- Let's deeply understand following code snippet
+```
+msg  db  'Hello, world!',0xa ;our dear string
+len  equ  $ - msg            ;length of our dear string
+```
+- <b>msg</b>, <b>len</b> are two variables with custom name
+- <b>$-msg</b> : gives the length of the string stored in <b>msg</b>.
+- <b>0xa</b>: a sentinel character indicates the ending of a string. 
+
+Facts:
+ - string instructions use ESI and EDI registers to point to the source and destination operands.
+ - 5 basic instructions for processing strings
+	- MOVS : moves 1 byte, word or doubleword of data from memory location to another.
+	- LODS: loads from memory. if operand is of one byte, it is loaded into the AL register, if the operand is one word, it is loaded into the AX register and a doubleword is loaded into the EAX register.
+	- STOS: stores the data from register (AL, AX or EAX) to memory
+	- CMPS: compares two data items in memory. Data could be of a byte size, word or doubleword.
+	- SCAS: compares the contents of a register (AL, AX or EAX) with the contents of an item in memory
+- instructions use the ES:DI and DS:DI pair of registers, where DI and SI registers contain valid offset addresses that refers to bytes stored in memory. 
+
+
+ ### Arrays:
+ - data definition directives can be used for defining a one-dimentional array.
+```
+; Initialize an array with multiple numbers, each number is 2 byte
+NUMBERS	DW  34,  45,  56,  67,  75, 89
+
+; Initialize an array with all zeros
+INVENTORY   DW  0, 0 , 0 , 0 , 0 , 0 , 0 , 0
+;or 
+INVENTORY TIMES 8 DW 0
+```
+
+### Procedures/Subroutines:
+```
+section	.text
+   global _start        ;must be declared for using gcc
 	
- 
- 
- 
+_start:	                ;tell linker entry point
+   mov	ecx,'4'
+   sub     ecx, '0'
+	
+   mov 	edx, '5'
+   sub     edx, '0'
+	
+   call    sum          ;call sum procedure
+   mov 	[res], eax
+   mov	ecx, msg	
+   mov	edx, len
+   mov	ebx,1	        ;file descriptor (stdout)
+   mov	eax,4	        ;system call number (sys_write)
+   int	0x80	        ;call kernel
+	
+   mov	ecx, res
+   mov	edx, 1
+   mov	ebx, 1	        ;file descriptor (stdout)
+   mov	eax, 4	        ;system call number (sys_write)
+   int	0x80	        ;call kernel
+	
+   mov	eax,1	        ;system call number (sys_exit)
+   int	0x80	        ;call kernel
+sum:
+   mov     eax, ecx
+   add     eax, edx
+   add     eax, '0'
+   ret
+	
+section .data
+msg db "The sum is:", 0xA,0xD 
+len equ $- msg   
+
+segment .bss
+res resb 1
+```
+ -  simple procedure named sum that adds the variables stored in the ECX and EDX register and returns the sum in the EAX register
+---
+
+### File management
+[Todo: I will explore this topic later if I really need to]
+
+### Memory management
+[Todo: I will explore this topic later if I really need to]
+
+ ## Reference
+ - https://www.tutorialspoint.com/assembly_programming/index.htm 
  	
                          
 
