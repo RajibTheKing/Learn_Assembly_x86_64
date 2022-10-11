@@ -54,7 +54,9 @@ Let A = 0x07F5 which needs 2 byte -> 64 bit
  - text section : section.text
  	
 ### Comments:
- ```; this program displays a message on screen```
+ ```assembly 
+ ; this program displays a message on screen
+ ```
 
 
 ### Statements are 3 types:
@@ -226,7 +228,7 @@ Let A = 0x07F5 which needs 2 byte -> 64 bit
 	
 ### Arithmetic Instruction sets:
 
-```
+```assembly
 INC destination
 DEC destination
 	Examples:
@@ -247,7 +249,7 @@ IDIV divisor
   
 ### Logical Instruction sets:
 
-```
+```assembly
 AND operand1, operand2
 OR operand1, operand2
 XOR operand1, operand2
@@ -256,7 +258,7 @@ NOT operand1
 ```
 
 ### Conditions:
-```
+```assembly
 CMP DX,	00  ; Compare the DX value with zero
 JE  L7      ; Jump if equal, to label L7
 .
@@ -281,7 +283,7 @@ LP2: ...
 - JMP instruction can be used for implementing loops
 - Following code snippet execute loop for 10 times
 
-```
+```assembly
 MOV	CL, 10
 L1:
 DEC	CL			; decrement CL by 1
@@ -304,7 +306,7 @@ LOOP L1
 
 ### Strings:
 - Let's deeply understand following code snippet
-```
+```assembly
 msg  db  'Hello, world!',0xa ;our dear string
 len  equ  $ - msg            ;length of our dear string
 ```
@@ -325,7 +327,7 @@ Facts:
 
  ### Arrays:
  - data definition directives can be used for defining a one-dimentional array.
-```
+```assembly
 ; Initialize an array with multiple numbers, each number is 2 byte
 NUMBERS	DW  34,  45,  56,  67,  75, 89
 
@@ -336,7 +338,7 @@ INVENTORY TIMES 8 DW 0
 ```
 
 ### Procedures/Subroutines:
-```
+```assembly
 section	.text
    global _start        ;must be declared for using gcc
 	
