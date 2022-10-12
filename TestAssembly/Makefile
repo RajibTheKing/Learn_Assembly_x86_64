@@ -8,7 +8,8 @@ TARGET=test_assembly
 all:
 	$(CC) -c $(CPPFILES)
 	$(ASMCOMPILER) -f elf64 $(ASMFILES)
-	$(CC) -o $(TARGET) $(OBJFILES) utility_functions.o
+	g++ -c utility_functions_GAS.S -o utility_functions_GAS.o
+	$(CC) -o $(TARGET) $(OBJFILES) utility_functions.o utility_functions_GAS.o
 	
 clean:
 	rm -f $(OBJFILES) $(TARGET) *~
