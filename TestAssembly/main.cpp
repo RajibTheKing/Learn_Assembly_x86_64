@@ -6,7 +6,7 @@ int main()
     AssemblyWrapper *assemblyWrapper = new AssemblyWrapper();
 
     
-    unsigned int a = 10;
+    unsigned int a = 20;
     unsigned int b = 15;
 
     unsigned int result = assemblyWrapper->getSum(a, b);

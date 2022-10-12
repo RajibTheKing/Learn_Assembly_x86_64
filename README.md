@@ -388,7 +388,9 @@ res resb 1
 [Todo: I will explore this topic later if I really need to]
 
  ## Reference
- - https://www.tutorialspoint.com/assembly_programming/index.htm 
+ - https://www.tutorialspoint.com/assembly_programming/index.htm
+ - https://sonictk.github.io/asm_tutorial/
+ 
  	
                          
 
