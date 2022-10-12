@@ -1,9 +1,11 @@
 #ifndef ASSEMBLY_WRAPPER_H
 #define ASSEMBLY_WRAPPER_H
 
+#include <stdio.h>
+
 extern "C"
 {
-    unsigned int getSum_x86_64(unsigned int &a, unsigned int &b);
+    unsigned int getsum_x86_64(unsigned int &a, unsigned int &b);
 }
 
 class AssemblyWrapper{

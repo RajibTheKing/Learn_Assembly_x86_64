@@ -1,9 +1,14 @@
 CC=g++
-CFLAGS=-std=c++20
-ODIR=obj
+ASMCOMPILER=nasm
+ASMFILES=utility_functions.asm
+CPPFILES=assembly_wrapper.cpp main.cpp
+OBJFILES=assembly_wrapper.o main.o
+TARGET=test_assembly
 
-install:
-	$(CC) -o program main.cpp assembly_wrapper.cpp
-
+all:
+	$(CC) -c $(CPPFILES)
+	$(ASMCOMPILER) -f elf64 $(ASMFILES)
+	$(CC) -o $(TARGET) $(OBJFILES) utility_functions.o
+	
 clean:
-	rm -f ./*.o
+	rm -f $(OBJFILES) $(TARGET) *~
