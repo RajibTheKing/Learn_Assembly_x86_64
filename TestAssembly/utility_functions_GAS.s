@@ -3,5 +3,5 @@
 getsum_x86_64_GAS:
     mov (%rcx), %rax  # store value of rcx into rax
     add (%rdx), %rax  # add value of rdx with rax
-    add $5, %rax      # add extra 5 rax only in GAS to differentiate
+    add $10, %rax      # add extra 5 rax only in GAS to differentiate
 	ret
