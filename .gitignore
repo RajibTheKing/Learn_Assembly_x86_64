@@ -3,3 +3,4 @@
 *.so
 *.a
 *.lib
+test_assembly

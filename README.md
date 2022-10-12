@@ -9,7 +9,7 @@
 
 
 ### Data Sizes:
-
+ - byte: 8 bit
  - word: 16 bit
  - doubleword: 32 bit
  - quadword: 64 bit
@@ -77,96 +77,45 @@ Let A = 0x07F5 which needs 2 byte -> 64 bit
  
  
  ### Processor Registers:
-
-  - 10 (32 bit registers)
-  - 6  (16 bit registers)
+ - General Purpose Registers(GPR):
+ 	- 16 GPRs on the x64 instruction set
+  	- names: rax, rbx, rcx, rdx, rbp, rsi, rdi, rsp, r8, r9, r10, r11 r12, r13, r14 and r15.
+  	- let's try to visualize how first 8 registers are addressed a little better.
+ 		![alt text](./images/register-bit-structure.png)
+  	- let's try to visualize how r8-r15 registers are addressed.
+ 		![alt text](./images/register-bit-structure-2.png)
+  	- here b, w, d means byte, word and doubleword respectively.
+ - Floating Point Registers:
+  	- 16 floating point registers, known as the xmm registers (xmm0 - xmm15).
+	- each register 128-bit wide
+	- Generally used for SIMD (Single Instruction Multiple Data) operations
+	- lower bits cannot be addressed separately
+ - Extensions: SSE/AVX/AVX2/AVX512:
+	- SSE: Streaming SIMD Extensions
+	- AVX: Advanced Vector Extensions
+	- 1999 intel introduced much wider registers upto 512-bit
+		![alt text](./images/SSE.png)
+ - Special purpose registers:
+	- rip: (Instruction Pointer) holds the address of where the next instruction to be executed is at in the assembly. 
+	- rsp: (Stack Pointer) meant to point to the bottom of the program stack
+	- rbp: (Base Pointer) helps in referencing the parameter variables passed to a subroutine.
+ - Index registers:
+	- rsi: source index
+	- rdi: destination index
+ - Control registers:
+  	- 32 bit instruction pointer register and 32 bit flags register combined are considered as the control register.
+  	- OF: (Overflow Flag) -> indicates the overflow of a high order bit of data after a signed arithmetic operation
+  	- DF: (Direction Flag) -> determines left or right direction for moving or comparing string data.
+		- DF = 0 --> the string operation takes left-to-right direction
+		- DF = 1 --> the string operation takes right-to-left direction
+  	- IF: (Interrupt Flag) -> determines whether the external interrupts (i.e. keyboard entry) are to be processed
+	- TF: (Trap Flag) -> set the operation of the processor in single step mode.
+  	- SF: (Sign Flag) -> shows thesign of the result of an arithmatic operation. 
+  	- ZF: (Zero Flag) -> indicates the result of an arithmetic or compariosn operation. A non zero result clears the zero flag to 0, and a zero results sets it to 1
+  	- AF: (Auxiliary Cary Flag) ->  contains the carry from bit 3 to 4 following an arithmetic operation.
+  	- PF: (Parity Flag) -> Indicates the total number of bits in the result obtained from an arithmetic operation.
+  	- CF: (Carry Flat) -> It contains the carry of 0 or 1 from a higher order bit  after an arithmetic operation.
  
- - grouped into 3 categories:
- 	- General registers
- 		- Data registers
- 		- Pointer registers
- 		- Index registers
- 	- Control registers
- 	- Segment registers
- 
- 
-  #### Data registers:
-  
-	  EAX -> 32 bit register
-	  	AX -> Lower 16 bits
-	  		AH -> Higher 8 bits 
-	  		AL -> Lower 8 bits
-	  	
-	  EBX, ECX, EDX --> similar
-	 
-  
-  	AX --> Accumulator 	(arithmatic operations)
-  	BX --> Base		(indexed addressing)
-  	CX --> Counter		(loop count in iterative operations)
-  	DX --> Data		(input/output operations)
-  	
-  #### Pointer registers:
-  	
-  	EIP -> 32 bit
-  		IP -> Lower 16 bits
-  		Instruction Pointer: 	- stores the offset address of the next instruction to be executed. 
-  					- CS:IP gives the complete address of the current instruction
-  		
-  	ESP -> 32 bit
-  		SP -> Lower 16 bits
-  		Stack Pointer: 		- provides the offset value within the program stack
-  					- SS:SP refers to be current position of data or address within the program stack.
-  					
-  	EBP -> 32 bit
-  		BP -> Lower 16 bits
-  		Base Pointer: 		- helps in referencing the parameter variables passed to a subroutine.
-  					- SS:BP to get the location of the parameter.
-  					- DI:BP, SI:BP for special addressing
-  					
-
-
-  #### Index registers:
-  
-  	ESI -> 32 bit
-  		SI -> Lower 16 bits
-  		Source Index: source index for string operations
-  	
-  	EDI -> 32 bit
-  		DI -> Lower 16 bits
-  		Destination Index: destination index for string operations
-  		
-  #### Control registers:
-  	
-  	32 bit instruction pointer register and 32 bit flags register combined are considered as the control register. 
-  	
-  	OF: (Overflow Flag) -> indicates the overflow of a high order bit of data after a signed arithmetic operation
-  	
-  	DF: (Direction Flag) -> determines left or right direction for moving or comparing string data. 
-  				DF = 0 --> the string operation takes left-to-right direction
-  				DF = 1 --> the string operation takes right-to-left direction
-  	
-  	IF: (Interrupt Flag) -> determines whether the external interrupts (i.e. keyboard entry) are to be processed
-  	
-  	TF: (Trap Flag) -> set the operation of the processor in single step mode. 
-  	
-  	SF: (Sign Flag) -> shows thesign of the result of an arithmatic operation. 
-  	
-  	ZF: (Zero Flag) -> indicates the result of an arithmetic or compariosn operation. A non zero result clears the 				   zero flag to 0, and a zero results sets it to 1
-  	
-  	AF: (Auxiliary Cary Flag) ->  contains the carry from bit 3 to 4 following an arithmetic operation. 
-  	
-  	PF: (Parity Flag) -> Indicates the total number of bits in the result obtained from an arithmetic operation. 
-  	
-  	CF: (Carry Flat) -> It contains the carry of 0 or 1 from a higher order bit  after an arithmetic operation. 
-  	
-  	
-  #### Segment registers: 
-  	
-  	Code segment : CS -> 16 bit
-  	Data segment : DS -> 16 bit
-  	Stack segment: SS -> 16 bit
-  	
-  	ES, FS and GS are more segment registers. 
   	
 ### Some Common System Calls:
  
@@ -381,6 +330,22 @@ res resb 1
  -  simple procedure named sum that adds the variables stored in the ECX and EDX register and returns the sum in the EAX register
 ---
 
+### Function
+ - Here is a simple c function that can be considered
+```c++
+unsigned int getsum_x86_64(unsigned int &a, unsigned int &b);
+```
+
+ - Assembly implementation will look like following
+ ```assembly
+ section .text
+global getsum_x86_64    ; parameters are in rcx and rdx
+getsum_x86_64:
+    mov rax, [rcx]  	; store value of rcx into rax
+    add rax, [rdx]  	; add value of rdx with rax
+	ret
+ ```
+
 ### File management
 [Todo: I will explore this topic later if I really need to]
 
@@ -390,7 +355,7 @@ res resb 1
  ## Reference
  - https://www.tutorialspoint.com/assembly_programming/index.htm
  - https://sonictk.github.io/asm_tutorial/
- 
+
  	
                          
 
