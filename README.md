@@ -352,6 +352,12 @@ getsum_x86_64:
 ### Memory management
 [Todo: I will explore this topic later if I really need to]
 
+### SIMD Instruction Sets (Most Interesting topic)
+ - Single Instruction Multiple Data
+ - to perform one operation across multiple streams of data at once in order to reduce the amount of work done.
+ - 
+
+
  ## Reference
  - https://www.tutorialspoint.com/assembly_programming/index.htm
  - https://sonictk.github.io/asm_tutorial/

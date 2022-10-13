@@ -7,7 +7,7 @@ OBJFILES=assembly_wrapper.o main.o utility_functions_GAS.o utility_functions.o
 TARGET=test_assembly
 
 all:
-	$(CC) -c $(CPPFILES) $(GASFILES)
+	$(CC) -c -g -Wall $(CPPFILES) $(GASFILES)
 	$(NASM) -f elf64 $(NASMFILES)
 	$(CC) -o $(TARGET) $(OBJFILES)
 	
