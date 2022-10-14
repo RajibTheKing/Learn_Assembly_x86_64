@@ -383,7 +383,7 @@ getsum_x86_64:
  - If we look at the chart, one thing we might be interested to know the difference between wrap-around and  Saturation.
 	![alt text](./images/Saturation_VS_Wraparound.png)
  - PADDB/PADDW/PADDD: add two packed numbers i.e byte/word/doubleword
- - PMULLW: multiply 4 words
+ - PMULLW: multiply 4 words and stores the four lo words of the four double word results
  - PMULHW/PMULHUW: multiply four words and stores the four hi words of the four doubleword results. PMULHUW is used for unsigned word.
 
  ## Reference
