@@ -3,4 +3,5 @@
 *.so
 *.a
 *.lib
+.qtc_clangd
 test_assembly

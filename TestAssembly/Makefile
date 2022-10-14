@@ -8,7 +8,7 @@ TARGET=test_assembly
 
 all:
 	$(CC) -c -g -Wall $(CPPFILES) $(GASFILES)
-	$(NASM) -f elf64 $(NASMFILES)
+	$(NASM) -f elf64 -g -F dwarf $(NASMFILES)
 	$(CC) -o $(TARGET) $(OBJFILES)
 	
 clean:

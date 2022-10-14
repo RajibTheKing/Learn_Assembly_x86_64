@@ -352,11 +352,39 @@ getsum_x86_64:
 ### Memory management
 [Todo: I will explore this topic later if I really need to]
 
-### SIMD Instruction Sets (Most Interesting topic)
+### SIMD Instruction Sets (Most Interesting and Advanced topic)
  - Single Instruction Multiple Data
  - to perform one operation across multiple streams of data at once in order to reduce the amount of work done.
- - 
-
+ - A proper visualization would be like following
+	![alt text](./images/SIMD_Operation_Overview.png)
+ - MMX (Multimedia Extension) was introduced in 1996 
+ - Many multimedia algorithms execute the same instructions on many pieces of  data in a large data set. For example:
+	- MPEG data operations
+	- Music data
+	- Image processing
+	- Gaming data
+	- Audio/Video codec optimizations
+ - Typical elements are small. i.e. 8 bits for pixels, 16 bits for audio, 32 bits  or graphics and general computing.
+ - MMX data types are following:
+	![alt text](./images/MMX_Data_Types.png)
+ - In total <b>57 MMX</b> instructions are defined to perform the parallel operations on multiple data elements packed into 64-bit data types including:
+	- add
+	- subtract
+	- multiply
+	- compare
+	- shift
+	- data conversion
+	- 64-bit data move
+	- 64-bit logical operations
+	- multiply-add
+ - Following 2 charts will give a brief overview of all SIMD instruction sets
+ 	![alt text](./images/MMX_Instruction_Overview_01.png)
+	![alt text](./images/MMX_Instructions_Overview_02.png)
+ - If we look at the chart, one thing we might be interested to know the difference between wrap-around and  Saturation.
+	![alt text](./images/Saturation_VS_Wraparound.png)
+ - PADDB/PADDW/PADDD: add two packed numbers i.e byte/word/doubleword
+ - PMULLW: multiply 4 words
+ - PMULHW/PMULHUW: multiply four words and stores the four hi words of the four doubleword results. PMULHUW is used for unsigned word.
 
  ## Reference
  - https://www.tutorialspoint.com/assembly_programming/index.htm
