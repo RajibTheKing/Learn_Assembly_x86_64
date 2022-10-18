@@ -385,6 +385,68 @@ getsum_x86_64:
  - PADDB/PADDW/PADDD: add two packed numbers i.e byte/word/doubleword
  - PMULLW: multiply 4 words and stores the four lo words of the four double word results
  - PMULHW/PMULHUW: multiply four words and stores the four hi words of the four doubleword results. PMULHUW is used for unsigned word.
+ - PACKSSWB/PACKSSDW: Pack with Signed Saturation instruction works exactly as following implementation.
+	```c++
+	switch(Instruction) 
+	{
+		case PACKSSWB:
+			if(OperandSize == 64) {
+				//PACKSSWB instruction with 64-bit operands
+				Destination[0..7] = SaturateSignedWordToSignedByte(Destination[0..15]);
+				Destination[8..15] = SaturateSignedWordToSignedByte(Destination[16..31]);
+				Destination[16..23] = SaturateSignedWordToSignedByte(Destination[32..47]);
+				Destination[24..31] = SaturateSignedWordToSignedByte(Destination[48..63]);
+				Destination[32..39] = SaturateSignedWordToSignedByte(Source[0..15]);
+				Destination[40..47] = SaturateSignedWordToSignedByte(Source[16..31]);
+				Destination[48..55] = SaturateSignedWordToSignedByte(Source[32..47]);
+				Destination[56..63] = SaturateSignedWordToSignedByte(Source[48..63]);
+			}
+			else {
+				//PACKSSWB instruction with 128-bit operands
+				Destination[0..7] = SaturateSignedWordToSignedByte(Destination[0..15]);
+				Destination[8..15] = SaturateSignedWordToSignedByte(Destination[16..31]);
+				Destination[16..23] = SaturateSignedWordToSignedByte(Destination[32..47]);
+				Destination[24..31] = SaturateSignedWordToSignedByte(Destination[48..63]);
+				Destination[32..39] = SaturateSignedWordToSignedByte(Destination[64..79]);
+				Destination[40..47] = SaturateSignedWordToSignedByte(Destination[80..95]);
+				Destination[48..55] = SaturateSignedWordToSignedByte(Destination[96..111]);
+				Destination[56..63] = SaturateSignedWordToSignedByte(Destination[112..127]);
+				Destination[64..71] = SaturateSignedWordToSignedByte(Source[0..15]);
+				Destination[72..79] = SaturateSignedWordToSignedByte(Source[16..31]);
+				Destination[80..87] = SaturateSignedWordToSignedByte(Source[32..47]);
+				Destination[88..95] = SaturateSignedWordToSignedByte(Source[48..63]);
+				Destination[96..103] = SaturateSignedWordToSignedByte(Source[64..79]);
+				Destination[104..111] = SaturateSignedWordToSignedByte(Source[80..95]);
+				Destination[112..119] = SaturateSignedWordToSignedByte(Source[96..111]);
+				Destination[120..127] = SaturateSignedWordToSignedByte(Source[112..127]);
+			}
+			break;
+		case PACKSSDW:
+			if(OperandSize == 64) {
+				//PACKSSDW instruction with 64-bit operands
+				Destination[0..15] = SaturateSignedDoublewordToSignedWord(Destination[0..31]);
+				Destination[16..31] = SaturateSignedDoublewordToSignedWord(Destination[32..63]);
+				Destination[32..47] = SaturateSignedDoublewordToSignedWord(Source[0..31]);
+				Destination[48..63] = SaturateSignedDoublewordToSignedWord(Source[32..63]);
+			}
+			else {
+				//PACKSSDW instruction with 128-bit operands
+				Destination[0..15] = SaturateSignedDwordToSignedWord(Destination[0..31]);
+				Destination[16..31] = SaturateSignedDwordToSignedWord(Destination[32..63]);
+				Destination[32..47] = SaturateSignedDwordToSignedWord(Destination[64..95]);
+				Destination[48..63] = SaturateSignedDwordToSignedWord(Destination[96..127]);
+				Destination[64..79] = SaturateSignedDwordToSignedWord(Source[0..31]);
+				Destination[80..95] = SaturateSignedDwordToSignedWord(Source[32..63]);
+				Destination[96..111] = SaturateSignedDwordToSignedWord(Source[64..95]);
+				Destination[112..127] = SaturateSignedDwordToSignedWord Source[96..127]);
+			}
+			break;
+	}
+	```
+	let's try to visualize this instruction:
+	![alt text](./images/packssdw.png)
+	![alt text](./images/packsswb.png)
+
 
  ## Reference
  - https://www.tutorialspoint.com/assembly_programming/index.htm
