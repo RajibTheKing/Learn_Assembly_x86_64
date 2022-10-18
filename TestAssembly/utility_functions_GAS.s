@@ -3,7 +3,6 @@
 getsum_x86_64_GAS:
     mov         (%rcx),     %rax            # store value of rcx into rax
     add         (%rdx),     %rax            # add value of rdx with rax
-    add         $10,        %rax            # add extra 10 value only in GAS to differentiate output
     ret
 
 
@@ -36,6 +35,9 @@ packed_suturation_test:
     #movhlps     xmm9,       xmm9            # move high 64 bits to low 64 bits.
 
     packsswb    %xmm9,      %xmm10
+    movq %xmm10, (%rdx)
+    psrldq      $8,         %xmm10          # shift right logical by 8 bytes = 64bit(moving data from upper 64bit to lower 64bit
+    sub         $8,         %rdx
+    movq %xmm10, (%rdx)
 
-    movq %xmm10, %xmm12
     ret

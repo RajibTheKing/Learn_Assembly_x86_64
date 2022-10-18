@@ -1,20 +1,38 @@
 #include "assembly_wrapper.h"
 #include "common.h"
 
+
+void printArrayInHex(unsigned char *data, int len)
+{
+    for(int i=0; i<len; i++){
+        printf("0x%02X ", data[i]);
+    }
+    printf("\n");
+}
+
 int main()
 {
     AssemblyWrapper *assemblyWrapper = new AssemblyWrapper();
 
-    
+    /* TEST: ADD
+    *  Syntex: add         %rdx,     %rax
+    */
+
+    printf("Testing: ADD\n");
     unsigned int a = 20;
     unsigned int b = 15;
+    //expected result = 35
 
+    printf("a = %d\n", a);
+    printf("b = %d\n", b);
     unsigned int result = assemblyWrapper->getSum(a, b);
+    printf("Sum = %d\n", result);
 
 
-    std::cout << "Sum = " << result << std::endl;
-
-
+    /*  TEST: PACKSSWB/PACKSSDW
+    *   Syntex: packsswb    %xmm9,      %xmm10
+    */
+    printf("Testing: PACKSSWB/PACKSSDW\n");
 //    //128 bits
 //    unsigned char inData[]  = {0xFF, 0x00, 0xDA, 0x00, 0x37, 0x00, 0x54, 0x00, 0x45, 0x00, 0xEA, 0x00, 0x23, 0x00, 0xFA, 0x00};
 
@@ -31,14 +49,18 @@ int main()
     //128 bits
     unsigned char outData[] = {0x22, 0x00, 0x22, 0x00, 0x22, 0x00, 0x22, 0x00, 0x22, 0x00, 0x22, 0x00, 0x22, 0x00, 0x22, 0x00};
 
+
+
     //expected
-    //unsigned char outData[] = {0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22,     0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11};
+    //unsigned char outData[] = {0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22};
 
 
+    printf("inData = "); printArrayInHex(inData, 16);
+    printf("outData = "); printArrayInHex(outData, 16);
     assemblyWrapper->packedSaturationTest(inData, outData);
+    printf("outData = "); printArrayInHex(outData, 16);
 
 
-    std::cout<< "Returned from packedSaturationTest" << std::endl;
 
 
     return 0;
