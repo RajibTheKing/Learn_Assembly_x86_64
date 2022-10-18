@@ -451,6 +451,9 @@ getsum_x86_64:
  ## Reference
  - https://www.tutorialspoint.com/assembly_programming/index.htm
  - https://sonictk.github.io/asm_tutorial/
+ - https://www.intel.com/content/dam/develop/external/us/en/documents/introduction-to-x64-assembly-181178.pdf
+ - https://c9x.me/x86/
+
 
  	
                          
