@@ -12,3 +12,10 @@ void AssemblyWrapper::packedSaturationTest(unsigned char *inData, unsigned char 
 {
     packed_suturation_test(inData, outData);
 }
+
+
+unsigned int AssemblyWrapper::searchSubstr(unsigned char *inStr, unsigned char *subStr)
+{
+    return search_substr(inStr, subStr);
+    //return 0;
+}

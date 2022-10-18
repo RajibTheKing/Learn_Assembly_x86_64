@@ -41,3 +41,23 @@ packed_suturation_test:
     movq %xmm10, (%rdx)
 
     ret
+
+
+
+.global search_substr                        # parameters are in rcx and rdx
+.text
+search_substr:
+    movq        (%rcx),     %xmm9           # move first 64 bit to xmm9 register(SSE)
+    add         $8,         %rcx            # rcx is pointer of inData
+                                            # this instruction will skip first 8 byte of inData
+    movq        (%rcx),     %xmm11          # move second 64 bit to xmm11 register(SSE), xmm11 is used as temp storage
+    pslldq      $8,         %xmm11          # shift left logical by 8 bytes = 64bit(moving data from lowerbits 64bit to upper 64bit
+    por         %xmm11,     %xmm9
+
+    movq        (%rdx),     %xmm10           # move first 64 bit to xmm9 register(SSE)
+
+    pcmpistrm  $0x4C,  %xmm9,     %xmm10
+
+    movq %xmm0, %rax
+    ret
+
