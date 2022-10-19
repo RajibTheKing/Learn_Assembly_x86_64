@@ -56,7 +56,7 @@ search_substr:
 
     movq        (%rdx),     %xmm10           # move first 64 bit to xmm9 register(SSE)
 
-    pcmpistrm  $0x4C,  %xmm9,     %xmm10
+    pcmpistrm  $0x0C,  %xmm9,     %xmm10
 
     movq %xmm0, %rax
     ret

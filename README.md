@@ -446,6 +446,18 @@ getsum_x86_64:
 	let's try to visualize this instruction:
 	![alt text](./images/packssdw.png)
 	![alt text](./images/packsswb.png)
+ - SSE String Manipulation:
+	- pcmpistri: Packed compare implicit length strings, return index
+	- pcmpistrm: Packed compare implicit length strings, return mask
+	- pcmpestri: Packed compare explicit length strings, return index
+	- pcmpestrm: Packed compare explicit length strings, return mask
+	- These compare instructions take three arguments. Argument 1 is always an xmm
+register, argument 2 can be an xmm register or a memory location, and argument 3 is an
+“immediate,” which is a control byte (imm8 in the Intel manuals) that specifies how the
+instruction executes.
+	![alt text](./images/imm8_control_byte.png)
+	- The result in IntRes2 can be stored as a mask in xmm0 for the mask instructions pcmpistrm and
+pcmpestrm or as an index in ecx for pcmpistri and pcmpestri.
 
 
  ## Reference
