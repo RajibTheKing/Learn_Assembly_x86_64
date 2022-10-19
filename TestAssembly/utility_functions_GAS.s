@@ -61,28 +61,28 @@ search_substr:
     ret
 
 
-.global compare_string                        # parameters are in *str1 = rax,  *str2 = rsi, str1len = rcx, str2len = rdx
+.global compare_string                          # parameters are in *str1 = rax,  *str2 = rsi, str1len = rcx, str2len = rdx
 .text
 compare_string:
 
 loop_label:
-    cmp $0x00, %rcx
-    je return_match
-    sub $8, %rcx
-    movq        (%rax),     %xmm10           # move first 64 bit of str1 to xmm10 register(SSE)
-    movq        (%rsi),     %xmm11           # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $8,         %rax
-    add         $8,         %rsi
-    pcmpistrm  $0x18,  %xmm10,     %xmm11
-    movq %xmm0, %r8
-    cmp  $0x00, %r8
-    je loop_label
-    jne return_mismatch
+    cmp         $0x00,      %rcx                # check if all characters are compared
+    je          return_match                    # ensures that all characters were matched
+    sub         $8,         %rcx                # substruct by 8
+    movq        (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+    movq        (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
+    add         $8,         %rax                # skip the pointer by 8 bytes
+    add         $8,         %rsi                # skip the pointer by 8 bytes
+    pcmpistrm   $0x18,      %xmm10,     %xmm11  # compare two sse register completely equal or not
+    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
+    cmp         $0x00,      %r8                 # check the output after pcmpistrm comparison
+    je          loop_label
+    jne         return_mismatch
 
 return_mismatch:
-    movq $0x01, %rax
+    movq        $0x01,      %rax
     ret
 
 return_match:
-    movq $0x00, %rax
+    movq        $0x00,      %rax
     ret
