@@ -10,8 +10,25 @@ void printArrayInHex(unsigned char *data, int len)
     printf("\n");
 }
 
+unsigned char* getRandomString(int len){
+    unsigned char *str = new unsigned char[len];
+    for(int i=0; i<len; i++){
+        int rand_now = (rand() % 26) + 'a';
+        str[i] = rand_now;
+    }
+    return str;
+}
+
+unsigned char* getDeepcopyString(unsigned char * str, unsigned int len){
+    unsigned char *deepCopyStr = new unsigned char[len];
+    memcpy(deepCopyStr, str, len);
+    return deepCopyStr;
+}
 int main()
 {
+    // Using system time as a seed value
+    srand((unsigned) time(NULL));
+
     AssemblyWrapper *assemblyWrapper = new AssemblyWrapper();
 
     /* TEST: ADD
@@ -32,7 +49,7 @@ int main()
     /*  TEST: PACKSSWB/PACKSSDW
     *   Syntex: packsswb    %xmm9,      %xmm10
     */
-    printf("Testing: PACKSSWB/PACKSSDW\n");
+    printf("\nTesting: PACKSSWB/PACKSSDW\n");
 //    //128 bits
     unsigned char inData[]  = {0xFF, 0x00, 0xDA, 0x00, 0x37, 0x00, 0x54, 0x00, 0x45, 0x00, 0xEA, 0x00, 0x23, 0x00, 0xFA, 0x00};
 
@@ -66,7 +83,7 @@ int main()
     *   Let's try to find the location by given substring
     */
 
-    printf("Testing: PCMPISTRI\n");
+    printf("\nTesting: PCMPISTRI\n");
     unsigned char inStr[] = "this is a joke!!";
     unsigned char subStr[] = "is";
     printf("inStr = %s\n", inStr);
@@ -77,6 +94,27 @@ int main()
     //  imm8 = 0x0c
     //  output: 0000000000100100
     printf("resStr = %02X\n", resStr);
+
+
+    printf("\nTesting: c++ function strcmp\n");
+    unsigned int str1Len = 10000000;
+    unsigned int str2Len = 10000000;
+    unsigned char *str1 = getRandomString(str1Len);
+    unsigned char *str2 = getDeepcopyString(str1, str2Len);
+    //unsigned char *str2 = getRandomString(str2Len);
+    //printf("str1 = %s\n", str1);
+    //printf("str2 = %s\n", str2);
+
+    // Start measuring time
+    auto begin = std::chrono::high_resolution_clock::now();
+    auto cmpRes = std::strcmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2));
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("compare(str1, str2) = %d\n", cmpRes);
+    std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds" << std::endl;
+    //Fact: 10 million characters(both str1 and str2 same length) std::strcmp takes only 850000 Nanoseconds(avg.) to compare
+
+
 
     return 0;
 }

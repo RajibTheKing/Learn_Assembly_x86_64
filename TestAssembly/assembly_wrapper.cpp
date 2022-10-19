@@ -17,5 +17,9 @@ void AssemblyWrapper::packedSaturationTest(unsigned char *inData, unsigned char 
 unsigned int AssemblyWrapper::searchSubstr(unsigned char *inStr, unsigned char *subStr)
 {
     return search_substr(inStr, subStr);
-    //return 0;
+}
+
+unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *str2, unsigned int str1Len, unsigned int str2Len)
+{
+    return compare_string(str1, str2, str1Len, str2Len);
 }
