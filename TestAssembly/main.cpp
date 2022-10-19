@@ -24,6 +24,20 @@ unsigned char* getDeepcopyString(unsigned char * str, unsigned int len){
     memcpy(deepCopyStr, str, len);
     return deepCopyStr;
 }
+
+unsigned int compareCharByChar(unsigned char *str1, unsigned char* str2, unsigned int str1len, unsigned int str2len)
+{
+    //in-efficient and Naive string compare
+
+    for(unsigned int i=0; i<str1len; i++)
+    {
+        if(str1[i] != str2[i])
+            return 1; //mismatch found
+    }
+
+    return 0; // no mismatch
+}
+
 int main()
 {
     // Using system time as a seed value
@@ -96,11 +110,14 @@ int main()
     printf("resStr = %02X\n", resStr);
 
 
-    printf("\nTesting: c++ function strcmp\n");
-    unsigned int str1Len = 10000000;
-    unsigned int str2Len = 10000000;
+    printf("\nTesting: string comparison\n");
+    unsigned int str1Len = 8 * 10000;
+    unsigned int str2Len = 8 * 10000;
     unsigned char *str1 = getRandomString(str1Len);
     unsigned char *str2 = getDeepcopyString(str1, str2Len);
+    //str2[str2Len-5] = '$'; //changing single byte
+    printf("Address of str1  = %p\n", str1);
+    printf("Address of str2  = %p\n", str2);
     //unsigned char *str2 = getRandomString(str2Len);
     //printf("str1 = %s\n", str1);
     //printf("str2 = %s\n", str2);
@@ -108,11 +125,15 @@ int main()
     // Start measuring time
     auto begin = std::chrono::high_resolution_clock::now();
     auto cmpRes = std::strcmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2));
+    //auto cmpRes = assemblyWrapper->compareString(str1, str2, str1Len, str2Len);
+    //auto cmpRes = compareCharByChar(str1, str2, str1Len, str2Len);
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
     printf("compare(str1, str2) = %d\n", cmpRes);
     std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds" << std::endl;
     //Fact: 10 million characters(both str1 and str2 same length) std::strcmp takes only 850000 Nanoseconds(avg.) to compare
+    delete[] str1;
+    delete[] str2;
 
 
 

@@ -44,12 +44,11 @@ packed_suturation_test:
 
 
 
-.global search_substr                        # parameters are in rcx and rdx
+.global search_substr                        # parameters are in str = rcx and substr = rdx
 .text
 search_substr:
     movq        (%rcx),     %xmm9           # move first 64 bit to xmm9 register(SSE)
-    add         $8,         %rcx            # rcx is pointer of inData
-                                            # this instruction will skip first 8 byte of inData
+    add         $8,         %rcx            # will skip first 8 byte of inData
     movq        (%rcx),     %xmm11          # move second 64 bit to xmm11 register(SSE), xmm11 is used as temp storage
     pslldq      $8,         %xmm11          # shift left logical by 8 bytes = 64bit(moving data from lowerbits 64bit to upper 64bit
     por         %xmm11,     %xmm9
@@ -62,19 +61,28 @@ search_substr:
     ret
 
 
-.global compare_string                        # parameters are in rcx and rdx
+.global compare_string                        # parameters are in *str1 = rax,  *str2 = rsi, str1len = rcx, str2len = rdx
 .text
 compare_string:
-    movq        (%rcx),     %xmm9           # move first 64 bit to xmm9 register(SSE)
-    add         $8,         %rcx            # rcx is pointer of inData
-                                            # this instruction will skip first 8 byte of inData
-    movq        (%rcx),     %xmm11          # move second 64 bit to xmm11 register(SSE), xmm11 is used as temp storage
-    pslldq      $8,         %xmm11          # shift left logical by 8 bytes = 64bit(moving data from lowerbits 64bit to upper 64bit
-    por         %xmm11,     %xmm9
 
-    movq        (%rdx),     %xmm10           # move first 64 bit to xmm9 register(SSE)
+loop_label:
+    cmp $0x00, %rcx
+    je return_match
+    sub $8, %rcx
+    movq        (%rax),     %xmm10           # move first 64 bit of str1 to xmm10 register(SSE)
+    movq        (%rsi),     %xmm11           # move first 64 bit of str2 to xmm11 register(SSE)
+    add         $8,         %rax
+    add         $8,         %rsi
+    pcmpistrm  $0x18,  %xmm10,     %xmm11
+    movq %xmm0, %r8
+    cmp  $0x00, %r8
+    je loop_label
+    jne return_mismatch
 
-    pcmpistrm  $0x0C,  %xmm9,     %xmm10
+return_mismatch:
+    movq $0x01, %rax
+    ret
 
-    movq %xmm0, %rax
+return_match:
+    movq $0x00, %rax
     ret
