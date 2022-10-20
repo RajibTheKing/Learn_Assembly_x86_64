@@ -52,8 +52,8 @@
     int strcmp ( const char * str1, const char * str2 );
     ```
  - Here given the execution time (in Nanoseconds) among those 3 approaches:
-    | Number of Characters  | Naive Approach | Assembly implementation | C++ Standard Library |
-    | --------------------- | -------------- | ----------------------- | -------------------- |
-    | 8 * 10000             | 459247         | 28927                   | 5130                 |
-    | 8 * 100000            | 3807261        | 287960                  | 33832                |
-    | 8 * 1000000           | 13491303       | 1048467                 | 626018               |
+    | Number of Characters  | Naive Approach | Assembly implementation | Assembly (Inline)    | C++ Standard Library |
+    | --------------------- | -------------- | ----------------------- | -------------------- | -------------------- |
+    | 8 * 10000             | 459247         | 14613                   | 14032                | 5130                 |
+    | 8 * 100000            | 3807261        | 143541                  | 141726               | 97937                |
+    | 8 * 1000000           | 13491303       | 616371                  | 616164               | 565875               |

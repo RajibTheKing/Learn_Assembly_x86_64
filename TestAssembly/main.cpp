@@ -124,8 +124,8 @@ int main()
 
     // Start measuring time
     auto begin = std::chrono::high_resolution_clock::now();
-    //auto cmpRes = std::strcmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2));
-    auto cmpRes = assemblyWrapper->compareString(str1, str2, str1Len, str2Len);
+    auto cmpRes = std::strcmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2));
+    //auto cmpRes = assemblyWrapper->compareString(str1, str2, str1Len, str2Len);
     //auto cmpRes = compareCharByChar(str1, str2, str1Len, str2Len);
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
