@@ -33,8 +33,8 @@ unsigned int AssemblyWrapper::searchSubstr(unsigned char *inStr, unsigned char *
 
 unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *str2, unsigned int str1Len, unsigned int str2Len)
 {
-    return compare_string(str1, str2, str1Len, str2Len);
-    /*
+    //return compare_string(str1, str2, str1Len, str2Len);
+
     unsigned int result=10;
     //try inline assembly
 
@@ -67,6 +67,6 @@ unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *
     );
 
     return result;
-    */
+
 
 }
