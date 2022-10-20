@@ -111,8 +111,8 @@ int main()
 
 
     printf("\nTesting: string comparison\n");
-    unsigned int str1Len = 8 * 1000000;
-    unsigned int str2Len = 8 * 1000000;
+    unsigned int str1Len = 8 * 10000;
+    unsigned int str2Len = 8 * 10000;
     unsigned char *str1 = getRandomString(str1Len);
     unsigned char *str2 = getDeepcopyString(str1, str2Len);
     //str2[str2Len-5] = '$'; //changing single byte

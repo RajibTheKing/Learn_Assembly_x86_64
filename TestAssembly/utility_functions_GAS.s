@@ -68,11 +68,11 @@ compare_string:
 loop_label:
     cmp         $0x00,      %rcx                # check if all characters are compared
     je          return_match                    # ensures that all characters were matched
-    sub         $8,         %rcx                # substruct by 8
-    movq        (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
-    movq        (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $8,         %rax                # skip the pointer by 8 bytes
-    add         $8,         %rsi                # skip the pointer by 8 bytes
+    sub         $16,         %rcx                # substruct by 8
+    movdqu        (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+    movdqu        (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
+    add         $16,         %rax                # skip the pointer by 8 bytes
+    add         $16,         %rsi                # skip the pointer by 8 bytes
     pcmpistrm   $0x18,      %xmm10,     %xmm11  # compare two sse register completely equal or not
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     cmp         $0x00,      %r8                 # check the output after pcmpistrm comparison
