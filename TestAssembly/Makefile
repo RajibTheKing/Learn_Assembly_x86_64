@@ -2,8 +2,18 @@ CC=g++
 NASM=nasm
 NASMFILES=utility_functions.asm
 GASFILES=utility_functions_GAS.s
-CPPFILES=assembly_wrapper.cpp main.cpp
-OBJFILES=assembly_wrapper.o main.o utility_functions_GAS.o utility_functions.o
+CPPFILES=assembly_wrapper.cpp \
+		main.cpp \
+		analyzesolution.cpp \
+		utility.cpp
+
+OBJFILES=assembly_wrapper.o \
+		main.o \
+		analyzesolution.o \
+		utility.o \
+		utility_functions_GAS.o \
+		utility_functions.o \
+
 TARGET=test_assembly
 
 all:
