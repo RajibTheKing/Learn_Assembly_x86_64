@@ -19,6 +19,7 @@ public:
     void analyzeSaturation();
     void analyzeSubstringSearch();
     void analyzeStringCompare();
+    void analyzeStringCompareCaseinsensitive();
 
 
 };

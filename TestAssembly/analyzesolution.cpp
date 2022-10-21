@@ -14,13 +14,15 @@ AnalyzeSolution::~AnalyzeSolution()
 
 void AnalyzeSolution::startAnaylizing()
 {
-    this->analyzeAdd();
+    //this->analyzeAdd();
 
-    this->analyzeSaturation();
+    //this->analyzeSaturation();
 
-    this->analyzeSubstringSearch();
+    //this->analyzeSubstringSearch();
 
-    this->analyzeStringCompare();
+    //this->analyzeStringCompare();
+
+    this->analyzeStringCompareCaseinsensitive();
 
 }
 
@@ -109,7 +111,7 @@ void AnalyzeSolution::analyzeStringCompare()
     unsigned int str1Len = 8 * 10000;
     unsigned int str2Len = 8 * 10000;
     unsigned char *str1 = utility->getRandomString(str1Len);
-    unsigned char *str2 = utility->getDeepcopyString(str1, str2Len);
+    unsigned char *str2 = utility->getDeepcopyString(str1, str1Len);
     //str2[str2Len-5] = '$'; //changing single byte
     printf("Address of str1  = %p\n", str1);
     printf("Address of str2  = %p\n", str2);
@@ -131,6 +133,43 @@ void AnalyzeSolution::analyzeStringCompare()
     delete[] str2;
 }
 
+
+/*  TEST: string compare (case Insensitive)
+*   Let's try to check if two strings are identical or not
+*/
+void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
+{
+    printf("\nTesting: string comparison (Case-Insensitive)\n");
+    unsigned int str1Len = 8 * 100000;
+    //unsigned int str2Len = 32;
+    unsigned char *str1 = utility->getRandomString(str1Len);
+    unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, str1Len);
+    str2[str1Len-1] = '$'; //changing single byte
+    printf("Address of str1  = %p\n", str1);
+    printf("Address of str2  = %p\n", str2);
+    //unsigned char *str2 = getRandomString(str2Len);
+    //printf("str1 = %s\n", str1);
+    //printf("str2 = %s\n", str2);
+
+    // Start measuring time
+    auto begin = std::chrono::high_resolution_clock::now();
+    //Source: https://linux.die.net/man/3/strcasecmp
+    auto cmpRes1 = strcasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2));
+    printf("strcasecmp(str1, str2) = %d\n", cmpRes1);
+
+
+    auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2);
+    printf("compareCharByCharCaseInsensitive(str1, str2) = %d\n", cmpRes2);
+
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+    std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds" << std::endl;
+    //Fact: 10 million characters(both str1 and str2 same length) std::strcmp takes only 850000 Nanoseconds(avg.) to compare
+    delete[] str1;
+    delete[] str2;
+}
 
 
 
