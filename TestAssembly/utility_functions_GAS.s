@@ -86,3 +86,30 @@ return_mismatch:
 return_match:
     movq        $0x00,      %rax
     ret
+
+
+.global compare_string_case_insensitive         # parameters are in *str1 = rax,  *str2 = rsi, str1len = rcx, str2len = rdx
+.text
+compare_string_case_insensitive:
+
+loop_label_1:
+    cmp         $0x00,      %rcx                # check if all characters are compared
+    je          return_match                    # ensures that all characters were matched
+    sub         $16,         %rcx                # substruct by 8
+    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+    movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
+    add         $16,         %rax                # skip the pointer by 8 bytes
+    add         $16,         %rsi                # skip the pointer by 8 bytes
+    pcmpistrm   $0x18,      %xmm10,     %xmm11  # compare two sse register completely equal or not
+    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
+    cmp         $0x00,      %r8                 # check the output after pcmpistrm comparison
+    je          loop_label
+    jne         return_mismatch
+
+return_mismatch_1:
+    movq        $0x01,      %rax
+    ret
+
+return_match_1:
+    movq        $0x00,      %rax
+    ret

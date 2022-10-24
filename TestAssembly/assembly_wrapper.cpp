@@ -70,3 +70,9 @@ unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *
 
 
 }
+
+unsigned int AssemblyWrapper::compareStringCaseinsensitive(unsigned char *str1, unsigned char *str2, unsigned int str1Len, unsigned int str2Len)
+{
+    //not implemented yet
+    return -1;
+}

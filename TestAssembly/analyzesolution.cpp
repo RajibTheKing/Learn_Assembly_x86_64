@@ -143,8 +143,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     unsigned int str1Len = 8 * 100000;
     //unsigned int str2Len = 32;
     unsigned char *str1 = utility->getRandomString(str1Len);
-    unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, str1Len);
-    str2[str1Len-1] = '$'; //changing single byte
+    unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, 32);
+    //str2[str1Len-1] = '$'; //changing single byte
     printf("Address of str1  = %p\n", str1);
     printf("Address of str2  = %p\n", str2);
     //unsigned char *str2 = getRandomString(str2Len);

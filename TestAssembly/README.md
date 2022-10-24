@@ -57,3 +57,14 @@
     | 8 * 10000             | 459247         | 14613                   | 14032                | 5130                 |
     | 8 * 100000            | 3807261        | 143541                  | 141726               | 97937                |
     | 8 * 1000000           | 13491303       | 616371                  | 616164               | 565875               |
+
+ - Let's try to convert whole string to Lower case characters using SSE Instruction. Can we convert 16 bytes parallely? 
+    | Field                 | 00    | 01    | 02    | 03    | 04    | 05    | 06    | 07    | 08    | 09    | 10    | 11    | 12    | 13    | 14    | 15    |
+    | ---                   | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    | --    |
+    | Input                 | O     | n     | c     | e     |       | U     | p     | o     | N     |       | A     |       | T     | i     | m     | e     |
+    |  >=A                  | 0xFF  | 0xFF  | 0xFF  | 0xFF  | 0x00  | 0xFF  | 0xFF  | 0xFF  | 0xFF  | 0x00  | 0xFF  | 0x00  | 0xFF  | 0xFF  | 0xFF  | 0xFF  |
+    |  <=Z                  | 0xFF  | 0x00  | 0x00  | 0x00  | 0xFF  | 0xFF  | 0x00  | 0x00  | 0xFF  | 0xFF  | 0xFF  | 0xFF  | 0xFF  | 0x00  | 0x00  | 0x00  |
+    | mask: >=A && <=Z      | 0xFF  | 0x00  | 0x00  | 0x00  | 0x00  | 0xFF  | 0x00  | 0x00  | 0xFF  | 0x00  | 0xFF  | 0x00  | 0xFF  | 0x00  | 0x00  | 0x00  |
+    | diff: 'a' - 'A'       | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  | 0x20  |
+    | toAdd: mask & diff    | 0x20  | 0x00  | 0x00  | 0x00  | 0x00  | 0x20  | 0x00  | 0x00  | 0x20  | 0x00  | 0x20  | 0x00  | 0x20  | 0x00  | 0x00  | 0x00  |
+    | Output: Input + toAdd | o     | n     | c     | e     |       | u     | p     | o     | n     |       | a     |       | t     | i     | m     | e     |

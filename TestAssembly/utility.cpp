@@ -59,7 +59,7 @@ unsigned int Utility::compareCharByChar(unsigned char *str1, unsigned char* str2
 
 unsigned int Utility::compareCharByCharCaseInsensitive(unsigned char *str1, unsigned char* str2)
 {
-    //not efficient implemnentation which is just a Naive solution
+    //not efficient implemnentation ... just a Naive solution
     int i=0, j=0;
     while(str1[i] && str2[j])
     {
