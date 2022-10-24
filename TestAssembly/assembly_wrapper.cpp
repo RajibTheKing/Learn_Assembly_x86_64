@@ -71,8 +71,8 @@ unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *
 
 }
 
-unsigned int AssemblyWrapper::compareStringCaseinsensitive(unsigned char *str1, unsigned char *str2, unsigned int str1Len, unsigned int str2Len)
+unsigned int AssemblyWrapper::compareStringCaseinsensitive(unsigned char *str1, unsigned char *str2, unsigned int len)
 {
-    //not implemented yet
-    return -1;
+    return compare_string_case_insensitive(str1, str2, len);
+
 }

@@ -140,11 +140,12 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    unsigned int str1Len = 8 * 100000;
-    //unsigned int str2Len = 32;
-    unsigned char *str1 = utility->getRandomString(str1Len);
-    unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, 32);
-    //str2[str1Len-1] = '$'; //changing single byte
+    unsigned int len = 8 * 100000;
+    //unsigned char definedString[] = "Once UpoN A Time";
+    unsigned char *str1 = utility->getRandomString(len);
+    //unsigned char *str1 = definedString;
+    unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
+    str2[len-1] = '$'; //changing single byte
     printf("Address of str1  = %p\n", str1);
     printf("Address of str2  = %p\n", str2);
     //unsigned char *str2 = getRandomString(str2Len);
@@ -154,13 +155,16 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     // Start measuring time
     auto begin = std::chrono::high_resolution_clock::now();
     //Source: https://linux.die.net/man/3/strcasecmp
-    auto cmpRes1 = strcasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2));
+    auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
     printf("strcasecmp(str1, str2) = %d\n", cmpRes1);
 
 
-    auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2);
-    printf("compareCharByCharCaseInsensitive(str1, str2) = %d\n", cmpRes2);
+    //auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2, len);
+    //printf("compareCharByCharCaseInsensitive(str1, str2) = %d\n", cmpRes2);
 
+
+    //auto cmpRes3 = assemblyWrapper->compareStringCaseinsensitive(str1, str2, len);
+    //printf("Assembly compareStringCaseinsensitive_x86_64(str1, str2) = %d\n", cmpRes3);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);

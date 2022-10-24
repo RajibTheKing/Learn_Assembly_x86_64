@@ -88,23 +88,47 @@ return_match:
     ret
 
 
-.global compare_string_case_insensitive         # parameters are in *str1 = rax,  *str2 = rsi, str1len = rcx, str2len = rdx
+
+.global compare_string_case_insensitive         # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
 .text
 compare_string_case_insensitive:
+    /*Prepare some constant*/
+    movq        $0x5A41,     %r12               #A: 0x41, Z: 0x5A --> defining Range
+    movq        %r12,        %xmm12             #CHARACTER_RANGE
+
+    movq        $0x20202020,       %r12         #Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
+    movq        %r12,        %xmm13             #moving diff to SSE register
+    pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
 
 loop_label_1:
-    cmp         $0x00,      %rcx                # check if all characters are compared
-    je          return_match                    # ensures that all characters were matched
-    sub         $16,         %rcx                # substruct by 8
+    cmp         $0x00,      %rdx                # check if all characters are compared
+    je          return_match_1                  # ensures that all characters were matched
+    sub         $16,         %rdx               # substruct by 8
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $16,         %rax                # skip the pointer by 8 bytes
-    add         $16,         %rsi                # skip the pointer by 8 bytes
-    pcmpistrm   $0x18,      %xmm10,     %xmm11  # compare two sse register completely equal or not
+    add         $16,         %rax               # skip the pointer by 8 bytes
+    add         $16,         %rsi               # skip the pointer by 8 bytes
+
+    /* Converting str1 to Lower */
+    pcmpistrm   $0x44,      %xmm10, %xmm12      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
+    pand        %xmm13,     %xmm0               # TO_ADD: CHARACTER_DIFF & MASK
+    movdqu      %xmm10,     %xmm14              # COPY: xmm10 --> xmm14
+    paddb       %xmm0,      %xmm14              # LOWER: TO_ADD + COPY --> xmm14
+
+    /* Converting str2 to Lower */
+    pcmpistrm   $0x44,      %xmm11, %xmm12      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
+    pand        %xmm13,     %xmm0               # TO_ADD: CHARACTER_DIFF & MASK
+    movdqu      %xmm11,     %xmm15              # COPY: xmm11 --> xmm15
+    paddb       %xmm0,      %xmm15              # LOWER: TO_ADD + COPY --> xmm15
+
+
+
+    /* Check str1 and str2 are identical or not */
+    pcmpistrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     cmp         $0x00,      %r8                 # check the output after pcmpistrm comparison
-    je          loop_label
-    jne         return_mismatch
+    je          loop_label_1
+    jne         return_mismatch_1
 
 return_mismatch_1:
     movq        $0x01,      %rax
