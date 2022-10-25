@@ -101,8 +101,8 @@ compare_string_case_insensitive:
     pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
 
 loop_label_1:
-    cmp         $0x00,      %rdx                # check if all characters are compared
-    je          return_match_1                  # ensures that all characters were matched
+    cmp         $16,        %rdx                # check if all characters are compared
+    jl          tail_loop                  # ensures that all characters were matched
     sub         $16,         %rdx               # substruct by 8
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
@@ -130,8 +130,43 @@ loop_label_1:
     je          loop_label_1
     jne         return_mismatch_1
 
+
+tail_loop:
+    cmp $0, %rdx
+    je return_match_1
+    mov (%rax), %r13
+    mov (%rsi), %r14
+    sub $1, %rdx
+    add         $1,         %rax
+    add         $1,         %rsi
+
+    /* convert single byte from str1 to lower*/
+str1:
+    cmp $0x41, %r13b
+    jl str2
+    cmp $0x5A, %r13b
+    jg str2
+    add $32, %r13b
+
+    /* convert single byte from str2 to lower*/
+str2:
+    cmp $0x41, %r14b
+    jl compare
+    cmp $0x5A, %r14b
+    jg compare
+    add $32, %r14b
+
+compare:
+    sub %r14b, %r13b
+    cmp $0, %r13b
+    jne return_mismatch_1
+    je tail_loop
+
+
+
 return_mismatch_1:
-    movq        $0x01,      %rax
+    movq        $0x00,      %rax
+    mov %r13b, %al
     ret
 
 return_match_1:
