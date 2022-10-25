@@ -100,7 +100,7 @@ compare_string_case_insensitive:
     movq        %r12,        %xmm13             #moving diff to SSE register
     pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
 
-loop_label_1:
+head_loop:
     cmp         $16,        %rdx                # check if all characters are compared
     jl          tail_loop                  # ensures that all characters were matched
     sub         $16,         %rdx               # substruct by 8
@@ -127,13 +127,19 @@ loop_label_1:
     pcmpistrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     cmp         $0x00,      %r8                 # check the output after pcmpistrm comparison
-    je          loop_label_1
-    jne         return_mismatch_1
+    je          head_loop
+    jne         prepare_intermediate_mismatch
 
+
+prepare_intermediate_mismatch:
+    sub         $16,         %rax
+    sub         $16,         %rsi
+    add         $16,         %rdx
+    jmp tail_loop
 
 tail_loop:
     cmp $0, %rdx
-    je return_match_1
+    je return_result_match
     mov (%rax), %r13
     mov (%rsi), %r14
     sub $1, %rdx
@@ -159,16 +165,16 @@ str2:
 compare:
     sub %r14b, %r13b
     cmp $0, %r13b
-    jne return_mismatch_1
+    jne return_result_mismatch
     je tail_loop
 
 
 
-return_mismatch_1:
+return_result_mismatch:
     movq        $0x00,      %rax
     mov %r13b, %al
     ret
 
-return_match_1:
+return_result_match:
     movq        $0x00,      %rax
     ret

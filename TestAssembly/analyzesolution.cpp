@@ -140,39 +140,57 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    unsigned int len = 5;
-    //unsigned char definedString[] = "Once UpoN A Time";
-    unsigned char *str1 = utility->getRandomString(len);
-    //unsigned char *str1 = definedString;
-    unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
-    str2[len-1] = '$'; //changing single byte
-    printf("Address of str1  = %p\n", str1);
-    printf("Address of str2  = %p\n", str2);
-    //unsigned char *str2 = getRandomString(str2Len);
-    printf("str1 = %s\n", str1);
-    printf("str2 = %s\n", str2);
+    //while(true)
+    {
+        unsigned int len = rand() % (8*100000);
+        printf("String Len selected = %d\n", len);
+        unsigned char *str1 = utility->getRandomString(len);
+        unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
+        unsigned int randomByte = rand() % len;
+        str2[randomByte] = '$'; //changing single byte
+        //printf("Address of str1  = %p\n", str1);
+        //printf("Address of str2  = %p\n", str2);
+        //unsigned char *str2 = getRandomString(str2Len);
+        if(len <=100)
+        {
+            printf("str1 = %s\n", str1);
+            printf("str2 = %s\n", str2);
+        }
 
-    // Start measuring time
-    auto begin = std::chrono::high_resolution_clock::now();
-    //Source: https://linux.die.net/man/3/strcasecmp
-    auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
-    printf("strcasecmp(str1, str2) = %d\n", cmpRes1);
+        // Start measuring time
+        auto begin1 = std::chrono::high_resolution_clock::now();
+        //Source: https://linux.die.net/man/3/strcasecmp
+        auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
+        auto end1 = std::chrono::high_resolution_clock::now();
+        auto elapsed1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - begin1);
 
 
-    //auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2, len);
-    //printf("compareCharByCharCaseInsensitive(str1, str2) = %d\n", cmpRes2);
+        auto begin2 = std::chrono::high_resolution_clock::now();
+        auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2, len);
+
+        auto end2 = std::chrono::high_resolution_clock::now();
+        auto elapsed2 = std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin2);
+
+        auto begin3 = std::chrono::high_resolution_clock::now();
+        auto cmpRes3 = assemblyWrapper->compareStringCaseinsensitive(str1, str2, len);
+        auto end3 = std::chrono::high_resolution_clock::now();
+        auto elapsed3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end3 - begin3);
 
 
-    auto cmpRes3 = assemblyWrapper->compareStringCaseinsensitive(str1, str2, len);
-    printf("Assembly compareStringCaseinsensitive_x86_64(str1, str2) = %d\n", cmpRes3);
+        printf("strcasecmp = %d\n", cmpRes1);
+        printf("Naive      = %d\n", cmpRes2);
+        printf("assembly   = %d\n", cmpRes3);
+        std::cout<<"Execution time measured: " << elapsed1.count() << " Nanoseconds" << std::endl;
+        std::cout<<"Execution time measured: " << elapsed2.count() << " Nanoseconds" << std::endl;
+        std::cout<<"Execution time measured: " << elapsed3.count() << " Nanoseconds" << std::endl;
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+        delete[] str1;
+        delete[] str2;
 
-    std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds" << std::endl;
-    //Fact: 10 million characters(both str1 and str2 same length) std::strcmp takes only 850000 Nanoseconds(avg.) to compare
-    delete[] str1;
-    delete[] str2;
+        std::string estStr;
+        getline(std::cin, estStr);
+        getchar();
+    }
 }
 
 
