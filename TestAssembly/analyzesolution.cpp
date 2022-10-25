@@ -142,7 +142,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     printf("\nTesting: string comparison (Case-Insensitive)\n");
     //while(true)
     {
-        unsigned int len = rand() % (8*100000);
+        unsigned int len = 8 * 1000000 ;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);

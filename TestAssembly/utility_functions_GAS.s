@@ -102,7 +102,7 @@ compare_string_case_insensitive:
 
 head_loop:
     cmp         $16,        %rdx                # check if all characters are compared
-    jl          tail_loop                  # ensures that all characters were matched
+    jl          tail_loop                       # ensures that all characters were matched
     sub         $16,         %rdx               # substruct by 8
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
