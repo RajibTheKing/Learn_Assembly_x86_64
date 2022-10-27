@@ -147,7 +147,9 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
         unsigned int randomByte = rand() % len;
-        str2[randomByte] = '$'; //changing single byte
+        int offset = 5 - (rand() % 10);
+        printf("Changing Single byte from %c to %c\n", str2[randomByte], str2[randomByte] + offset);
+        str2[randomByte] += offset;
         //printf("Address of str1  = %p\n", str1);
         //printf("Address of str2  = %p\n", str2);
         //unsigned char *str2 = getRandomString(str2Len);
@@ -172,7 +174,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         auto elapsed2 = std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin2);
 
         auto begin3 = std::chrono::high_resolution_clock::now();
-        auto cmpRes3 = assemblyWrapper->compareStringCaseinsensitive(str1, str2, len);
+        auto cmpRes3 = assemblyWrapper->compareStringCaseinsensitive(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
         auto end3 = std::chrono::high_resolution_clock::now();
         auto elapsed3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end3 - begin3);
 
