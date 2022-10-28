@@ -205,4 +205,6 @@
     | 10000004              | 31765328       | 1416264                 |
     | 11000003              | 34791641       | 1584822                 |
     | 12000009              | 38439044       | 1745398                 |
-
+  
+- Here showing the graph using those statistical data points
+![alt text](../images/Graph_Execution_Time.png)
