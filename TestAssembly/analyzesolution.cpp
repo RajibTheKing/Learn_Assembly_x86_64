@@ -1,9 +1,13 @@
 #include "analyzesolution.h"
+#include "cType.inl"
 
 AnalyzeSolution::AnalyzeSolution()
 {
     assemblyWrapper = new AssemblyWrapper();
     utility = new Utility();
+    char c = 'h';
+    char d = ANG::string::toUpper(c);
+    std::cout<<d<<std::endl;
 }
 
 AnalyzeSolution::~AnalyzeSolution()
@@ -14,7 +18,7 @@ AnalyzeSolution::~AnalyzeSolution()
 
 void AnalyzeSolution::startAnaylizing()
 {
-    //this->analyzeAdd();
+    this->analyzeAdd();
 
     //this->analyzeSaturation();
 
@@ -142,14 +146,14 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     printf("\nTesting: string comparison (Case-Insensitive)\n");
     //while(true)
     {
-        unsigned int len = rand() % 10000000  ;
+        unsigned int len = 12000000 + 9;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
-        unsigned int randomByte = rand() % len;
-        int offset = 5 - (rand() % 10);
-        printf("Changing Single byte from %c to %c\n", str2[randomByte], str2[randomByte] + offset);
-        str2[randomByte] += offset;
+//        unsigned int randomByte = rand() % len;
+//        int offset = 5 - (rand() % 10);
+//        printf("Changing Single byte from %c to %c\n", str2[randomByte], str2[randomByte] + offset);
+//        str2[randomByte] += offset;
         //printf("Address of str1  = %p\n", str1);
         //printf("Address of str2  = %p\n", str2);
         //unsigned char *str2 = getRandomString(str2Len);

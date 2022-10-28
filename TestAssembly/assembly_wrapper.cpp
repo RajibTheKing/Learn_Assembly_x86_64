@@ -1,5 +1,7 @@
 #include "assembly_wrapper.h"
 
+#include "cType.inl"
+
 #define ASM(...) asm( #__VA_ARGS__
 
 
@@ -7,6 +9,10 @@
 
 unsigned int AssemblyWrapper::getSum(unsigned int &a, unsigned int &b)
 {
+    char c = 'h';
+    char d = ANG::string::toUpper(c);
+    std::cout<<d<<std::endl;
+
     //return getsum_x86_64(a, b);
     //return getsum_x86_64_GAS(a, b);
     unsigned int sum;
@@ -137,33 +143,33 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
 
             ///< convert single byte from str1 to lower
         str1:
-            cmp $0x41, %%r13b;
+            cmp         $0x41,          %%r13b;
             jl str2;
-            cmp $0x5A, %%r13b;
+            cmp         $0x5A,          %%r13b;
             jg str2;
-            add $32, %%r13b;
+            add         $32,            %%r13b;
 
             ///< convert single byte from str2 to lower
         str2:
-            cmp $0x41, %%r14b;
+            cmp         $0x41,          %%r14b;
             jl compare;
-            cmp $0x5A, %%r14b;
+            cmp         $0x5A,          %%r14b;
             jg compare;
-            add $32, %%r14b;
+            add         $32,            %%r14b;
 
         compare:
-            sub %%r14b, %%r13b;
-            cmp $0, %%r13b;
+            sub         %%r14b,         %%r13b;
+            cmp         $0,             %%r13b;
             jne return_result_mismatch;
             je tail_loop;
 
         return_result_mismatch:
-            and $0xFF, %%r13;
-            movl %%r13d, %0;
+            and         $0xFF,          %%r13;
+            movl        %%r13d,         %0;
             jmp end_func;
 
         return_result_match:
-            movl $0, %0;
+            movl        $0,             %0;
         end_func:
         )
         : ///< output operands

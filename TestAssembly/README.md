@@ -138,33 +138,33 @@
 
                 ///< convert single byte from str1 to lower
             str1:
-                cmp $0x41, %%r13b;
+                cmp         $0x41,          %%r13b;
                 jl str2;
-                cmp $0x5A, %%r13b;
+                cmp         $0x5A,          %%r13b;
                 jg str2;
-                add $32, %%r13b;
+                add         $32,            %%r13b;
 
                 ///< convert single byte from str2 to lower
             str2:
-                cmp $0x41, %%r14b;
+                cmp         $0x41,          %%r14b;
                 jl compare;
-                cmp $0x5A, %%r14b;
+                cmp         $0x5A,          %%r14b;
                 jg compare;
-                add $32, %%r14b;
+                add         $32,            %%r14b;
 
             compare:
-                sub %%r14b, %%r13b;
-                cmp $0, %%r13b;
+                sub         %%r14b,         %%r13b;
+                cmp         $0,             %%r13b;
                 jne return_result_mismatch;
                 je tail_loop;
 
             return_result_mismatch:
-                and $0xFF, %%r13;
-                movl %%r13d, %0;
+                and         $0xFF,          %%r13;
+                movl        %%r13d,         %0;
                 jmp end_func;
 
             return_result_match:
-                movl $0, %0;
+                movl        $0,             %0;
             end_func:
             )
             : ///< output operands
@@ -192,9 +192,17 @@
     | toAdd: mask & diff    | 0x20  | 0x00  | 0x00  | 0x00  | 0x00  | 0x20  | 0x00  | 0x00  | 0x20  | 0x00  | 0x20  | 0x00  | 0x20  | 0x00  | 0x00  | 0x00  |
     | Output: Input + toAdd | o     | n     | c     | e     |       | u     | p     | o     | n     |       | a     |       | t     | i     | m     | e     |
 
-- Here given the execution time (in Nanoseconds) among those 3 approaches:
+- Here given the execution time (in Nanoseconds) among those 2 approaches:
     | Number of Characters  | Naive Approach | Assembly implementation |
     | --------------------- | -------------- | ----------------------- |
-    | 8 * 10000             | 777282         | 33008                   |
-    | 8 * 100000            | 2573739        | 108532                  |
-    | 8 * 1000000           | 8914861        | 377431                  |
+    | 80007                 | 802901         | 33835                   |
+    | 90009                 | 967873         | 40611                   |
+    | 100011                | 1108531        | 45164                   |
+    | 110013                | 1189427        | 49766                   |
+    | 1000003               | 3164134        | 132179                  |
+    | 1100007               | 3528646        | 143818                  |
+    | 1200009               | 3774193        | 156841                  |
+    | 10000004              | 31765328       | 1416264                 |
+    | 11000003              | 34791641       | 1584822                 |
+    | 12000009              | 38439044       | 1745398                 |
+
