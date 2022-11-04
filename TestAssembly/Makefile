@@ -1,4 +1,4 @@
-CC=g++
+CC=g++ -std=c++20
 NASM=nasm
 NASMFILES=utility_functions.asm
 GASFILES=utility_functions_GAS.s

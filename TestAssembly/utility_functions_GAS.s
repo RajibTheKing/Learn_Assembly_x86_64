@@ -1,3 +1,12 @@
+
+.global sub_check_x86_64
+.text
+sub_check_x86_64:
+    mov $15, %rdx
+    sub $16, %rdx
+    ret
+
+
 .global getsum_x86_64_GAS                   # parameters are in rcx and rdx
 .text
 getsum_x86_64_GAS:
@@ -101,9 +110,9 @@ compare_string_case_insensitive:
     pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
 
 head_loop:
-    cmp         $16,        %rdx                # check if all characters are compared
-    jl          tail_loop                       # ensures that all characters were matched
-    sub         $16,         %rdx               # substruct by 8
+    sub         $16,        %rdx                # check if all characters are compared
+    js          prepare_tail_loop                       # ensures that all characters were matched
+
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
     add         $16,         %rax               # skip the pointer by 8 bytes
@@ -126,10 +135,30 @@ head_loop:
     /* Check str1 and str2 are identical or not */
     pcmpistrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
-    cmp         $0x00,      %r8                 # check the output after pcmpistrm comparison
-    je          head_loop
-    jne         prepare_intermediate_mismatch
+    sub         $0x00,      %r8                 # check the output after pcmpistrm comparison
+    jz          head_loop
+    jnz         prepare_intermediate_mismatch
 
+#check_tail:
+#    movq %rdx, %rax
+#    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+#    movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
+
+#    pcmpestrm   $0x44,      %xmm10, %xmm12
+#    pand        %xmm13,     %xmm0
+#    movdqu      %xmm10,     %xmm14
+#    paddb       %xmm0,      %xmm14
+
+#    pcmpestrm   $0x44,      %xmm11, %xmm12
+#    pand        %xmm13,     %xmm0
+#    movdqu      %xmm11,     %xmm15
+#    paddb       %xmm0,      %xmm15
+
+#    pcmpestrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
+#    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
+#    cmp         $0x00,      %r8
+#    je          return_match
+#    jne         tail_loop
 
 prepare_intermediate_mismatch:
     sub         $16,         %rax
@@ -137,9 +166,13 @@ prepare_intermediate_mismatch:
     add         $16,         %rdx
     jmp tail_loop
 
+prepare_tail_loop:
+    add         $16,        %rdx
+    jmp tail_loop
+
 tail_loop:
-    cmp $0, %rdx
-    je return_result_match
+    sub $0, %rdx
+    jz return_result_match
     mov (%rax), %r13
     mov (%rsi), %r14
     sub $1, %rdx
@@ -164,9 +197,9 @@ str2:
 
 compare:
     sub %r14b, %r13b
-    cmp $0, %r13b
-    jne return_result_mismatch
-    je tail_loop
+    sub $0, %r13b
+    jnz return_result_mismatch
+    jz tail_loop
 
 
 

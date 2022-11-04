@@ -5,6 +5,7 @@
 
 extern "C"
 {
+    void sub_check_x86_64();
     unsigned int getsum_x86_64(unsigned int &a, unsigned int &b);
     unsigned int getsum_x86_64_GAS(unsigned int &a, unsigned int &b);
     void packed_suturation_test(unsigned char *inData, unsigned char *outData);

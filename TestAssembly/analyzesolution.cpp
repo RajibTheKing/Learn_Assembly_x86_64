@@ -18,7 +18,7 @@ AnalyzeSolution::~AnalyzeSolution()
 
 void AnalyzeSolution::startAnaylizing()
 {
-    this->analyzeAdd();
+    //this->analyzeAdd();
 
     //this->analyzeSaturation();
 
@@ -144,28 +144,34 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    //while(true)
+    /// while(true)
     {
-        unsigned int len = 12000000 + 9;
+        /// Generate two strings with random characters
+        unsigned int len = 201;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
-//        unsigned int randomByte = rand() % len;
-//        int offset = 5 - (rand() % 10);
-//        printf("Changing Single byte from %c to %c\n", str2[randomByte], str2[randomByte] + offset);
-//        str2[randomByte] += offset;
-        //printf("Address of str1  = %p\n", str1);
-        //printf("Address of str2  = %p\n", str2);
-        //unsigned char *str2 = getRandomString(str2Len);
+
+        /// change a random byte to make expected equal false
+        unsigned int randomByte = rand() % len;
+        int offset = 5 - (rand() % 10);
+        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+        str2[randomByte] += offset;
+
+        /// print the starting address of both strings
+        printf("Address of str1  = %p\n", str1);
+        printf("Address of str2  = %p\n", str2);
+
+        /// if the length is less then 100 then show the strings on console output
         if(len <=100)
         {
             printf("str1 = %s\n", str1);
             printf("str2 = %s\n", str2);
         }
 
-        // Start measuring time
+        /// Start measuring time
         auto begin1 = std::chrono::high_resolution_clock::now();
-        //Source: https://linux.die.net/man/3/strcasecmp
+        // Source: https://linux.die.net/man/3/strcasecmp
         auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
         auto end1 = std::chrono::high_resolution_clock::now();
         auto elapsed1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - begin1);
@@ -173,7 +179,6 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
         auto begin2 = std::chrono::high_resolution_clock::now();
         auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2, len);
-
         auto end2 = std::chrono::high_resolution_clock::now();
         auto elapsed2 = std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin2);
 
@@ -182,7 +187,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         auto end3 = std::chrono::high_resolution_clock::now();
         auto elapsed3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end3 - begin3);
 
-
+        /// show the execution time comparisons
         printf("strcasecmp = %d\n", cmpRes1);
         printf("Naive      = %d\n", cmpRes2);
         printf("assembly   = %d\n", cmpRes3);
@@ -190,12 +195,16 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         std::cout<<"Execution time measured: " << elapsed2.count() << " Nanoseconds" << std::endl;
         std::cout<<"Execution time measured: " << elapsed3.count() << " Nanoseconds" << std::endl;
 
+//        /// show the strings again to check if the characters are modified after any funciton calls
+//        if(len <=100)
+//        {
+//            printf("str1 = %s\n", str1);
+//            printf("str2 = %s\n", str2);
+//        }
+
+        /// de-allocate memories
         delete[] str1;
         delete[] str2;
-
-        std::string estStr;
-        getline(std::cin, estStr);
-        getchar();
     }
 }
 
