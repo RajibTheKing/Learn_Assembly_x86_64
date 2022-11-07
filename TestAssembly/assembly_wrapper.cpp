@@ -82,7 +82,8 @@ unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *
 
 int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *rhs, unsigned int len)
 {
-//    sub_check_x86_64();
+    //sub_check_x86_64();
+
 //    int result = compare_string_case_insensitive(lhs, rhs, len);
 //    return result > 127 ? result - 256 : result;
 
@@ -100,7 +101,7 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
 
         head_loop:
             sub         $16,            %3;                     ///< check if all characters are compared
-            js          prepare_tail_loop;                      ///< all characters were matched so far. i.e. len = 37, 32 bytes are checked inside head_loop, 5 bytes will be checked inside tail_loop
+            js          prepare_explicit_length;                ///< all characters were matched so far. i.e. len = 37, 32 bytes are checked inside head_loop, 5 bytes will be checked with explicit length
             movdqu      (%1),           %%xmm10;                ///< move double quad word (128 bit) of lhs to xmm10 register(SSE)
             movdqu      (%2),           %%xmm11;                ///< move double quad word (128 bit) of rhs to xmm11 register(SSE)
             add         $16,            %1;                     ///< skip the pointer by 16 bytes
@@ -125,6 +126,32 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
             jz          head_loop;
             jnz         prepare_intermediate_mismatch;          ///< Here we already found a mismatch inside head_loop, need to check one by one again to return the result
 
+        prepare_explicit_length:
+            add         $16,            %3;
+            jmp         explicit_length_compare;
+
+        explicit_length_compare:
+            movdqu      (%1),           %%xmm10;                ///< move 64 bit of lhs to xmm10 register(SSE), actual string with garbage
+            movdqu      (%2),           %%xmm11;                ///< move 64 bit of rhs to xmm11 register(SSE), actual string with garbage
+
+            mov         %3,             %%eax;                  ///< lhs explicit length has to be stored in %eax
+            mov         %3,             %%edx;                  ///< rhs explicit length has to be stored in %edx
+
+            pcmpestrm   $0x44,          %%xmm10,    %%xmm12;
+            pand        %%xmm13,        %%xmm0;
+            movdqu      %%xmm10,        %%xmm14;
+            paddb       %%xmm0,         %%xmm14;
+
+            pcmpestrm   $0x44,          %%xmm11,    %%xmm12;
+            pand        %%xmm13,        %%xmm0;
+            movdqu      %%xmm11,        %%xmm15;
+            paddb       %%xmm0,         %%xmm15;
+
+            pcmpestrm   $0x18,          %%xmm14,    %%xmm15;    ///< compare two sse register completely equal or not, explicit length are in %rax and %rdx
+            movq        %%xmm0,         %%r8;                   ///< move the result of xmm0 register to r8 register (temp) to perform sub instruction
+            sub         $0x00,          %%r8;
+            jz          return_result_match;
+            jnz         tail_loop;
 
         prepare_intermediate_mismatch:
             sub         $16,            %1;
@@ -132,9 +159,7 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
             add         $16,            %3;
             jmp tail_loop;
 
-        prepare_tail_loop:
-            add         $16,            %3;
-            jmp tail_loop;
+
 
         tail_loop:
             movq        (%1),           %%r13;
@@ -181,10 +206,17 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
             "r" (rhs),                                          // %2
             "r" (len)                                           // %3
         : /// clobber
-            "%xmm0", "%xmm10", "%xmm11", "%xmm12", "%xmm13","%xmm14", "%xmm15", "%r8", "%r12", "%r14", "%r13", "memory"
+            "%xmm0", "%xmm10", "%xmm11", "%xmm12", "%xmm13","%xmm14", "%xmm15", "%rax", "%rdx", "%r8", "%r12", "%r14", "%r13", "memory"
 
     );
     /// Signed byte Value Range: -128...0....+127, following statement is going to convert unsigned value to signed value
     return result > 127 ? result - 256 : result;
 
+}
+
+
+int AssemblyWrapper::testMovdqa(const char *lhs, const char *rhs, unsigned int len){
+    printf("Inside wrapper: lhs = %s\n",lhs);
+    printf("Inside wrapper: rhs = %s\n",rhs);
+    return test_movdqa_x86_64(lhs, rhs, len);
 }

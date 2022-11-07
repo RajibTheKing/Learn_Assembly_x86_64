@@ -12,6 +12,7 @@ extern "C"
     unsigned int search_substr(unsigned char *inStr, unsigned char *subStr);
     unsigned int compare_string(unsigned char *str1, unsigned char *str2, unsigned int str1len, unsigned int str2len);
     int compare_string_case_insensitive(const char *str1, const char *str2, unsigned int len);
+    int test_movdqa_x86_64(const char *lhs, const char *rhs, unsigned int len);
 }
 
 class AssemblyWrapper{
@@ -21,6 +22,7 @@ public:
     unsigned int searchSubstr(unsigned char *inStr, unsigned char* subStr);
     unsigned int compareString(unsigned char *str1, unsigned char *str2, unsigned int str1Len, unsigned int str2Len);
     int compareStringCaseinsensitive(const char *str1, const char *str2, unsigned int len);
+    int testMovdqa(const char *lhs, const char *rhs, unsigned int len);
 };
 
 #endif

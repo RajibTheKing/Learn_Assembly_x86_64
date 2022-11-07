@@ -20,6 +20,7 @@ public:
     void analyzeSubstringSearch();
     void analyzeStringCompare();
     void analyzeStringCompareCaseinsensitive();
+    void analyzeMovdqa();
 
 
 };

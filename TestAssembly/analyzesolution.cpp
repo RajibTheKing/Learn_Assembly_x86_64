@@ -28,6 +28,8 @@ void AnalyzeSolution::startAnaylizing()
 
     this->analyzeStringCompareCaseinsensitive();
 
+    //this->analyzeMovdqa();
+
 }
 
 /* TEST: ADD
@@ -144,10 +146,12 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    /// while(true)
+    int testCase = 100000;
+    int kase = 0;
+    while(kase++ < testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 201;
+        unsigned int len = 1 + rand() % 909;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
@@ -163,7 +167,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         printf("Address of str2  = %p\n", str2);
 
         /// if the length is less then 100 then show the strings on console output
-        if(len <=100)
+        if(len <= 100)
         {
             printf("str1 = %s\n", str1);
             printf("str2 = %s\n", str2);
@@ -205,8 +209,45 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         /// de-allocate memories
         delete[] str1;
         delete[] str2;
+
+        if(cmpRes1 == cmpRes2 && cmpRes2 == cmpRes3){
+            printf("Case: %d --> Result MATCH!!\n", kase);
+        }else{
+            printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
+            break;
+        }
     }
+
+
 }
 
+void AnalyzeSolution::analyzeMovdqa()
+{
+    std::string_view lhs{"once upon a time in germany"}; ///< lhs length = 27
+    std::string_view rhs = lhs.substr(20, 5);
+    unsigned int len = 5;
+    auto result = assemblyWrapper->testMovdqa(lhs.data(), rhs.data(), len);
+
+//    const char *a = lhs.data();
+//    const char *b = rhs.data();
+
+//    std::cout<<&*a<<std::endl;
+//    std::cout<<&*b<<std::endl;
+
+//    unsigned char *lhs = new unsigned char[16];
+//    unsigned char *rhs = lhs + 10;
+//    int len = 5;
+
+//    int len = 5;
+//    void *lhs = mmap ( NULL, 16*sizeof(unsigned char), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0 );
+//    void *rhs = lhs;
+
+//    std::string str1 = "Once Upon A Time in Germany";
+//    memcpy(lhs, str1.c_str(), 16);
+//    printf("%s\n", (unsigned char *)lhs);
+
+    //auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), (reinterpret_cast<const char*>(rhs) + 10), len);
+    printf("Result = %d\n", result);
+}
 
 

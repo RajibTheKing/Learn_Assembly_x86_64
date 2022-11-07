@@ -139,26 +139,33 @@ head_loop:
     jz          head_loop
     jnz         prepare_intermediate_mismatch
 
-#check_tail:
-#    movq %rdx, %rax
-#    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
-#    movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
+prepare_tail_loop:
+    add         $16,        %rdx
+    jmp check_tail
 
-#    pcmpestrm   $0x44,      %xmm10, %xmm12
-#    pand        %xmm13,     %xmm0
-#    movdqu      %xmm10,     %xmm14
-#    paddb       %xmm0,      %xmm14
+check_tail:
+    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+    movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
 
-#    pcmpestrm   $0x44,      %xmm11, %xmm12
-#    pand        %xmm13,     %xmm0
-#    movdqu      %xmm11,     %xmm15
-#    paddb       %xmm0,      %xmm15
+    push %rax
+    movq %rdx, %rax
 
-#    pcmpestrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
-#    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
-#    cmp         $0x00,      %r8
-#    je          return_match
-#    jne         tail_loop
+    pcmpestrm   $0x44,      %xmm10, %xmm12
+    pand        %xmm13,     %xmm0
+    movdqu      %xmm10,     %xmm14
+    paddb       %xmm0,      %xmm14
+
+    pcmpestrm   $0x44,      %xmm11, %xmm12
+    pand        %xmm13,     %xmm0
+    movdqu      %xmm11,     %xmm15
+    paddb       %xmm0,      %xmm15
+
+    pcmpestrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
+    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
+    pop %rax
+    sub         $0x00,      %r8
+    jz          return_match
+    jnz         tail_loop
 
 prepare_intermediate_mismatch:
     sub         $16,         %rax
@@ -166,16 +173,10 @@ prepare_intermediate_mismatch:
     add         $16,         %rdx
     jmp tail_loop
 
-prepare_tail_loop:
-    add         $16,        %rdx
-    jmp tail_loop
 
 tail_loop:
-    sub $0, %rdx
-    jz return_result_match
     mov (%rax), %r13
     mov (%rsi), %r14
-    sub $1, %rdx
     add         $1,         %rax
     add         $1,         %rsi
 
@@ -197,9 +198,10 @@ str2:
 
 compare:
     sub %r14b, %r13b
-    sub $0, %r13b
     jnz return_result_mismatch
-    jz tail_loop
+    sub $1, %rdx
+    jnz tail_loop
+    jz return_result_match
 
 
 
@@ -210,4 +212,14 @@ return_result_mismatch:
 
 return_result_match:
     movq        $0x00,      %rax
+    ret
+
+
+
+.global test_movdqa_x86_64         # parameters are in *lhs = rax,  *rhs = rsi, len = rdx
+.text
+test_movdqa_x86_64:
+    movdqu (%rax), %xmm11
+    movdqu (%rsi), %xmm12
+    mov $11, %rax
     ret

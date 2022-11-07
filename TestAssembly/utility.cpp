@@ -57,7 +57,7 @@ unsigned int Utility::compareCharByChar(unsigned char *str1, unsigned char* str2
     return 0; // no mismatch
 }
 
-unsigned int Utility::compareCharByCharCaseInsensitive(unsigned char *str1, unsigned char* str2, unsigned int len)
+int Utility::compareCharByCharCaseInsensitive(unsigned char *str1, unsigned char* str2, unsigned int len)
 {
     //not efficient implemnentation ... just a Naive solution
     int i=0, j=0;
