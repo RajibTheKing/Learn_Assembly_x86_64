@@ -134,8 +134,8 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
             movdqu      (%1),           %%xmm10;                ///< move 64 bit of lhs to xmm10 register(SSE), actual string with garbage
             movdqu      (%2),           %%xmm11;                ///< move 64 bit of rhs to xmm11 register(SSE), actual string with garbage
 
-            mov         %3,             %%eax;                  ///< lhs explicit length has to be stored in %eax
-            mov         %3,             %%edx;                  ///< rhs explicit length has to be stored in %edx
+            movl         %3,             %%eax;                  ///< lhs explicit length has to be stored in %eax
+            movl         %3,             %%edx;                  ///< rhs explicit length has to be stored in %edx
 
             pcmpestrm   $0x44,          %%xmm10,    %%xmm12;
             pand        %%xmm13,        %%xmm0;

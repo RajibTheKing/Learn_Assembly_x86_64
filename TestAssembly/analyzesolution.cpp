@@ -26,9 +26,9 @@ void AnalyzeSolution::startAnaylizing()
 
     //this->analyzeStringCompare();
 
-    this->analyzeStringCompareCaseinsensitive();
+    //this->analyzeStringCompareCaseinsensitive();
 
-    //this->analyzeMovdqa();
+    this->analyzeMovdqa();
 
 }
 
@@ -146,7 +146,8 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    int testCase = 100000;
+    //long totalTime1, totalTime2, totalTime3;
+    int testCase = 1000;
     int kase = 0;
     while(kase++ < testCase)
     {
@@ -223,10 +224,10 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 void AnalyzeSolution::analyzeMovdqa()
 {
-    std::string_view lhs{"once upon a time in germany"}; ///< lhs length = 27
-    std::string_view rhs = lhs.substr(20, 5);
-    unsigned int len = 5;
-    auto result = assemblyWrapper->testMovdqa(lhs.data(), rhs.data(), len);
+//    std::string_view lhs{"once upon a time in germany"}; ///< lhs length = 27
+//    std::string_view rhs = lhs.substr(20, 5);
+//    unsigned int len = 5;
+//    auto result = assemblyWrapper->testMovdqa(lhs.data(), rhs.data(), len);
 
 //    const char *a = lhs.data();
 //    const char *b = rhs.data();
@@ -245,9 +246,21 @@ void AnalyzeSolution::analyzeMovdqa()
 //    std::string str1 = "Once Upon A Time in Germany";
 //    memcpy(lhs, str1.c_str(), 16);
 //    printf("%s\n", (unsigned char *)lhs);
+//    auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), (reinterpret_cast<const char*>(rhs) + 10), len);
 
-    //auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), (reinterpret_cast<const char*>(rhs) + 10), len);
-    printf("Result = %d\n", result);
+    int testCases = 100000;
+    int kase = 0;
+    while(kase < testCases)
+    {
+        kase++;
+
+        int len = 5;
+        unsigned char *lhs = new unsigned char[1];
+        unsigned char *rhs = lhs;
+        auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), reinterpret_cast<const char*>(rhs), len);
+        printf("Case: %d -->Address = %p,  Result = %d\n", kase, lhs, result);
+        //delete[] lhs;
+    }
 }
 
 

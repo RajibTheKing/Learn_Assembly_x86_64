@@ -17,7 +17,7 @@ OBJFILES=assembly_wrapper.o \
 TARGET=test_assembly
 
 all:
-	$(CC) -c -g -Wall $(CPPFILES) $(GASFILES)
+	$(CC) -c -g -Wall -march=x86-64 $(CPPFILES) $(GASFILES)
 	$(NASM) -f elf64 -g -F dwarf $(NASMFILES)
 	$(CC) -o $(TARGET) $(OBJFILES)
 	
