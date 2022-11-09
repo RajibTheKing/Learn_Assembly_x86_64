@@ -162,8 +162,8 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
 
 
         tail_loop:
-            movq        (%1),           %%r13;
-            movq        (%2),           %%r14;
+            movb        (%1),           %%r13b;
+            movb        (%2),           %%r14b;
             add         $1,             %1;
             add         $1,             %2;
 
@@ -216,7 +216,7 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
 
 
 int AssemblyWrapper::testMovdqa(const char *lhs, const char *rhs, unsigned int len){
-    printf("Inside wrapper: lhs = %s\n",lhs);
-    printf("Inside wrapper: rhs = %s\n",rhs);
+    printf("Inside wrapper: address of lhs = %p\n",lhs);
+    printf("Inside wrapper: address of rhs = %p, diff = %d\n",rhs, int(rhs-lhs));
     return test_movdqa_x86_64(lhs, rhs, len);
 }

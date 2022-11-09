@@ -26,9 +26,9 @@ void AnalyzeSolution::startAnaylizing()
 
     //this->analyzeStringCompare();
 
-    //this->analyzeStringCompareCaseinsensitive();
+    this->analyzeStringCompareCaseinsensitive();
 
-    this->analyzeMovdqa();
+    //this->analyzeMovdqa();
 
 }
 
@@ -147,7 +147,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
     //long totalTime1, totalTime2, totalTime3;
-    int testCase = 1000;
+    int testCase = 10000;
     int kase = 0;
     while(kase++ < testCase)
     {
@@ -248,17 +248,38 @@ void AnalyzeSolution::analyzeMovdqa()
 //    printf("%s\n", (unsigned char *)lhs);
 //    auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), (reinterpret_cast<const char*>(rhs) + 10), len);
 
-    int testCases = 100000;
+//    int testCases = 10000;
+//    int kase = 0;
+
+//    while(kase < testCases)
+//    {
+//        kase++;
+
+//        int len = 5;
+//        unsigned char *lhs = new unsigned char[1];
+//        unsigned char *rhs = lhs + 16;
+//        auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), reinterpret_cast<const char*>(rhs), len);
+//        printf("Case: %d --> Result = %d\n", kase, result);
+//        //delete[] lhs;
+//    }
+
+    int testCases = 10000;
     int kase = 0;
+    long address = 100; //< It's just a value
+    long *p = &address;
+
     while(kase < testCases)
     {
         kase++;
-
         int len = 5;
-        unsigned char *lhs = new unsigned char[1];
-        unsigned char *rhs = lhs;
+        p += rand()%1000;
+        printf("Specify Address: %p\n", p);
+        void *lhs = mmap ( p, 1*sizeof(unsigned char), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0 );
+        void *rhs = lhs;
+        rhs = static_cast<char*>(rhs) + 20;
+
         auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), reinterpret_cast<const char*>(rhs), len);
-        printf("Case: %d -->Address = %p,  Result = %d\n", kase, lhs, result);
+        printf("Case: %d --> Result = %d\n", kase, result);
         //delete[] lhs;
     }
 }

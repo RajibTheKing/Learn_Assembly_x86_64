@@ -175,8 +175,8 @@ prepare_intermediate_mismatch:
 
 
 tail_loop:
-    mov (%rax), %r13
-    mov (%rsi), %r14
+    movb (%rax), %r13b
+    movb (%rsi), %r14b
     add         $1,         %rax
     add         $1,         %rsi
 
@@ -221,5 +221,5 @@ return_result_match:
 test_movdqa_x86_64:
     movdqu (%rax), %xmm11
     movdqu (%rsi), %xmm12
-    mov $11, %rax
+    mov $0, %rax
     ret
