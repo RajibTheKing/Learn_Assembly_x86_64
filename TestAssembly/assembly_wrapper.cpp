@@ -101,7 +101,7 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
 
         head_loop:
             sub         $16,            %3;                     ///< check if all characters are compared
-            js          prepare_explicit_length;                ///< all characters were matched so far. i.e. len = 37, 32 bytes are checked inside head_loop, 5 bytes will be checked with explicit length
+            jle         prepare_explicit_length;                ///< all characters were matched so far. i.e. len = 37, 32 bytes are checked inside head_loop, 5 bytes will be checked with explicit length
             movdqu      (%1),           %%xmm10;                ///< move double quad word (128 bit) of lhs to xmm10 register(SSE)
             movdqu      (%2),           %%xmm11;                ///< move double quad word (128 bit) of rhs to xmm11 register(SSE)
             add         $16,            %1;                     ///< skip the pointer by 16 bytes
@@ -219,4 +219,9 @@ int AssemblyWrapper::testMovdqa(const char *lhs, const char *rhs, unsigned int l
     printf("Inside wrapper: address of lhs = %p\n",lhs);
     printf("Inside wrapper: address of rhs = %p, diff = %d\n",rhs, int(rhs-lhs));
     return test_movdqa_x86_64(lhs, rhs, len);
+}
+
+int AssemblyWrapper::iCaseCompare(const char *lhs, const char *rhs, unsigned int len){
+    int result = i_case_compare(lhs, rhs, len);
+    return result;
 }

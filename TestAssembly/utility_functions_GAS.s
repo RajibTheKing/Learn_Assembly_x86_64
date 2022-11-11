@@ -111,7 +111,7 @@ compare_string_case_insensitive:
 
 head_loop:
     sub         $16,        %rdx                # check if all characters are compared
-    js          prepare_tail_loop                       # ensures that all characters were matched
+    jle         prepare_explicit_length         # ensures that all characters were matched
 
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
@@ -139,11 +139,11 @@ head_loop:
     jz          head_loop
     jnz         prepare_intermediate_mismatch
 
-prepare_tail_loop:
+prepare_explicit_length:
     add         $16,        %rdx
-    jmp check_tail
+    jmp explicit_length_compare
 
-check_tail:
+explicit_length_compare:
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
 
@@ -164,7 +164,7 @@ check_tail:
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     pop %rax
     sub         $0x00,      %r8
-    jz          return_match
+    jz          return_result_match
     jnz         tail_loop
 
 prepare_intermediate_mismatch:
@@ -221,5 +221,8 @@ return_result_match:
 test_movdqa_x86_64:
     movdqu (%rax), %xmm11
     movdqu (%rsi), %xmm12
+#    loadss        $0x5A41,        %xmm12
+    subps %xmm11, %xmm12
+
     mov $0, %rax
     ret

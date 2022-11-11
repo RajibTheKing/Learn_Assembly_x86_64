@@ -5,6 +5,7 @@ assembly_wrapper.cpp
 assembly_wrapper.h
 cType.inl
 common.h
+iCaseCompare.s
 main.cpp
 utility.cpp
 utility.h

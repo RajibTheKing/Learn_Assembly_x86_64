@@ -147,21 +147,21 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
     //long totalTime1, totalTime2, totalTime3;
-    int testCase = 10000;
+    int testCase = 100;
     int kase = 0;
     while(kase++ < testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 1 + rand() % 909;
+        unsigned int len = 10000 + rand() % 331;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-        /// change a random byte to make expected equal false
-        unsigned int randomByte = rand() % len;
-        int offset = 5 - (rand() % 10);
-        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-        str2[randomByte] += offset;
+//        /// change a random byte to make expected equal false
+//        unsigned int randomByte = rand() % len;
+//        int offset = 5 - (rand() % 10);
+//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+//        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
@@ -175,11 +175,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         }
 
         /// Start measuring time
-        auto begin1 = std::chrono::high_resolution_clock::now();
-        // Source: https://linux.die.net/man/3/strcasecmp
-        auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
-        auto end1 = std::chrono::high_resolution_clock::now();
-        auto elapsed1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - begin1);
+//        auto begin1 = std::chrono::high_resolution_clock::now();
+//        // Source: https://linux.die.net/man/3/strcasecmp
+//        auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
+//        auto end1 = std::chrono::high_resolution_clock::now();
+//        auto elapsed1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - begin1);
 
 
         auto begin2 = std::chrono::high_resolution_clock::now();
@@ -192,13 +192,20 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         auto end3 = std::chrono::high_resolution_clock::now();
         auto elapsed3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end3 - begin3);
 
+        auto begin4 = std::chrono::high_resolution_clock::now();
+        auto cmpRes4 = assemblyWrapper->iCaseCompare(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
+        auto end4 = std::chrono::high_resolution_clock::now();
+        auto elapsed4 = std::chrono::duration_cast<std::chrono::nanoseconds>(end4 - begin4);
+
         /// show the execution time comparisons
-        printf("strcasecmp = %d\n", cmpRes1);
-        printf("Naive      = %d\n", cmpRes2);
-        printf("assembly   = %d\n", cmpRes3);
-        std::cout<<"Execution time measured: " << elapsed1.count() << " Nanoseconds" << std::endl;
+//        printf("strcasecmp = %d\n", cmpRes1);
+        printf("Naive                       = %d\n", cmpRes2);
+        printf("assembly                    = %d\n", cmpRes3);
+        printf("assembly(without tail_loop) = %d\n", cmpRes4);
+//        std::cout<<"Execution time measured: " << elapsed1.count() << " Nanoseconds" << std::endl;
         std::cout<<"Execution time measured: " << elapsed2.count() << " Nanoseconds" << std::endl;
         std::cout<<"Execution time measured: " << elapsed3.count() << " Nanoseconds" << std::endl;
+        std::cout<<"Execution time measured: " << elapsed4.count() << " Nanoseconds" << std::endl;
 
 //        /// show the strings again to check if the characters are modified after any funciton calls
 //        if(len <=100)
@@ -211,7 +218,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         delete[] str1;
         delete[] str2;
 
-        if(cmpRes1 == cmpRes2 && cmpRes2 == cmpRes3){
+        if(cmpRes2 == cmpRes3 && (cmpRes2 == 0? cmpRes4 == 0: cmpRes4 != 0)){
             printf("Case: %d --> Result MATCH!!\n", kase);
         }else{
             printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
@@ -224,10 +231,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 void AnalyzeSolution::analyzeMovdqa()
 {
-//    std::string_view lhs{"once upon a time in germany"}; ///< lhs length = 27
-//    std::string_view rhs = lhs.substr(20, 5);
-//    unsigned int len = 5;
-//    auto result = assemblyWrapper->testMovdqa(lhs.data(), rhs.data(), len);
+    std::string_view lhs{"once upon a time in germany"}; ///< lhs length = 27
+    std::string_view rhs = lhs;//lhs.substr(20, 5);
+    unsigned int len = 5;
+    auto result = assemblyWrapper->testMovdqa(lhs.data(), rhs.data(), len);
+    printf("Result = %d\n", result);
 
 //    const char *a = lhs.data();
 //    const char *b = rhs.data();
@@ -263,25 +271,25 @@ void AnalyzeSolution::analyzeMovdqa()
 //        //delete[] lhs;
 //    }
 
-    int testCases = 10000;
-    int kase = 0;
-    long address = 100; //< It's just a value
-    long *p = &address;
+//    int testCases = 1000;
+//    int kase = 0;
+//    long address = 100; //< It's just a value
+//    long *p = &address;
 
-    while(kase < testCases)
-    {
-        kase++;
-        int len = 5;
-        p += rand()%1000;
-        printf("Specify Address: %p\n", p);
-        void *lhs = mmap ( p, 1*sizeof(unsigned char), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0 );
-        void *rhs = lhs;
-        rhs = static_cast<char*>(rhs) + 20;
+//    while(kase < testCases)
+//    {
+//        kase++;
+//        int len = 5;
+//        p  = p + rand() % 1000;
+//        printf("Specify Address: %p\n", p);
+//        void *lhs = mmap ( p, 1*sizeof(unsigned char), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0 );
+//        void *rhs = lhs;
+//        rhs = static_cast<char*>(rhs) + 20;
 
-        auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), reinterpret_cast<const char*>(rhs), len);
-        printf("Case: %d --> Result = %d\n", kase, result);
-        //delete[] lhs;
-    }
+//        auto result = assemblyWrapper->testMovdqa(reinterpret_cast<const char*>(lhs), reinterpret_cast<const char*>(rhs), len);
+//        printf("Case: %d --> Result = %d\n", kase, result);
+//        //delete[] lhs;
+//    }
 }
 
 

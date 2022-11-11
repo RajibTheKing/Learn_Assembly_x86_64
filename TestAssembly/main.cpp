@@ -21,6 +21,10 @@ int main()
 //    }
 //    printf("\n");
 
+//    unsigned int x = 2541;
+
+//    printf("%X\n", x);
+
     return 0;
 }
 
