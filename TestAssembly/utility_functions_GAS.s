@@ -119,13 +119,13 @@ head_loop:
     add         $16,         %rsi               # skip the pointer by 8 bytes
 
     /* Converting str1 to Lower */
-    pcmpistrm   $0x44,      %xmm10, %xmm12      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
+    pcmpistrm   $0x44,      %xmm12, %xmm10       # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
     pand        %xmm13,     %xmm0               # TO_ADD: CHARACTER_DIFF & MASK
     movdqu      %xmm10,     %xmm14              # COPY: xmm10 --> xmm14
     paddb       %xmm0,      %xmm14              # LOWER: TO_ADD + COPY --> xmm14
 
     /* Converting str2 to Lower */
-    pcmpistrm   $0x44,      %xmm11, %xmm12      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
+    pcmpistrm   $0x44,      %xmm12, %xmm11      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
     pand        %xmm13,     %xmm0               # TO_ADD: CHARACTER_DIFF & MASK
     movdqu      %xmm11,     %xmm15              # COPY: xmm11 --> xmm15
     paddb       %xmm0,      %xmm15              # LOWER: TO_ADD + COPY --> xmm15
@@ -148,7 +148,7 @@ explicit_length_compare:
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
 
     push %rax
-    movq %rdx, %rax
+    movq $2, %rax
 
     pcmpestrm   $0x44,      %xmm10, %xmm12
     pand        %xmm13,     %xmm0
@@ -160,6 +160,7 @@ explicit_length_compare:
     movdqu      %xmm11,     %xmm15
     paddb       %xmm0,      %xmm15
 
+    movq %rdx, %rax
     pcmpestrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     pop %rax

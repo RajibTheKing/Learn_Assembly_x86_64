@@ -134,7 +134,7 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
             movdqu      (%1),           %%xmm10;                ///< move 64 bit of lhs to xmm10 register(SSE), actual string with garbage
             movdqu      (%2),           %%xmm11;                ///< move 64 bit of rhs to xmm11 register(SSE), actual string with garbage
 
-            movl         %3,             %%eax;                  ///< lhs explicit length has to be stored in %eax
+            movl         $2,             %%eax;                  ///< lhs explicit length has to be stored in %eax
             movl         %3,             %%edx;                  ///< rhs explicit length has to be stored in %edx
 
             pcmpestrm   $0x44,          %%xmm10,    %%xmm12;
@@ -147,6 +147,7 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
             movdqu      %%xmm11,        %%xmm15;
             paddb       %%xmm0,         %%xmm15;
 
+            movl         %3,             %%eax;
             pcmpestrm   $0x18,          %%xmm14,    %%xmm15;    ///< compare two sse register completely equal or not, explicit length are in %rax and %rdx
             movq        %%xmm0,         %%r8;                   ///< move the result of xmm0 register to r8 register (temp) to perform sub instruction
             sub         $0x00,          %%r8;

@@ -48,7 +48,7 @@ explicit_length_compare:
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
 
     push %rax
-    movq %rdx, %rax
+    movq $2, %rax
 
     pcmpestrm   $0x44,      %xmm10, %xmm12
     pand        %xmm13,     %xmm0
@@ -60,6 +60,7 @@ explicit_length_compare:
     movdqu      %xmm11,     %xmm15
     paddb       %xmm0,      %xmm15
 
+    movq %rdx, %rax
     pcmpestrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
     movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     pop %rax
