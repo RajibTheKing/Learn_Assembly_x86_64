@@ -22,6 +22,7 @@ public:
     void analyzeStringCompare();
     void analyzeStringCompareCaseinsensitive();
     void analyzeMovdqa();
+    std::string getNameBySolution(int n);
 
 
 };

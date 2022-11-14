@@ -4,9 +4,6 @@
 AnalyzeSolution::AnalyzeSolution()
 {
     utility = new Utility();
-    char c = 'h';
-    char d = ANG::string::toUpper(c);
-    std::cout<<d<<std::endl;
 }
 
 AnalyzeSolution::~AnalyzeSolution()
@@ -28,6 +25,26 @@ void AnalyzeSolution::startAnaylizing()
 
     //this->analyzeMovdqa();
 
+}
+
+std::string AnalyzeSolution::getNameBySolution(int n){
+    switch (n) {
+    case 0:
+        return "strcasecmp";
+        break;
+    case 1:
+        return "C++ Naive";
+        break;
+    case 2:
+        return "assembly with with ordering";
+        break;
+    case 3:
+        return "assembly without ordering";
+        break;
+    default:
+        return "No Solution by this number";
+        break;
+    }
 }
 
 /* TEST: ADD
@@ -162,7 +179,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
     int results[number_of_solutions];
 
-    int testCase = 100;
+    int testCase = 100000;
     int kase = 0;
 
 
@@ -170,9 +187,9 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     while(kase++ < testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 1 ; //+ rand() % 15;
+        unsigned int len = 1 + rand() % 15;
         totalLength+=len;
-        printf("String Len selected = %d\n", len);
+//        printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
@@ -182,16 +199,16 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
 //        str2[randomByte] += offset;
 
-        /// print the starting address of both strings
-        printf("Address of str1  = %p\n", str1);
-        printf("Address of str2  = %p\n", str2);
+//        /// print the starting address of both strings
+//        printf("Address of str1  = %p\n", str1);
+//        printf("Address of str2  = %p\n", str2);
 
-        /// if the length is less then 100 then show the strings on console output
-        if(len <= 100)
-        {
-            printf("str1 = %s\n", str1);
-            printf("str2 = %s\n", str2);
-        }
+//        /// if the length is less then 100 then show the strings on console output
+//        if(len <= 100)
+//        {
+//            printf("str1 = %s\n", str1);
+//            printf("str2 = %s\n", str2);
+//        }
 
         /// Start Checking the Results and Measuring Execution time for each solution
         for(int i=0; i<number_of_solutions; i++)
@@ -200,7 +217,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             auto cmpRes = solutions[i](reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
             auto end = std::chrono::high_resolution_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-            std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<i<<") --> "<<cmpRes<< std::endl;
+            //std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<cmpRes<< std::endl;
 
             totalTime[i] += elapsed.count();
             results[i] = cmpRes;
@@ -208,12 +225,12 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
         }
 
-        if(results[0] == results[1] && results[1] == results[2] && ((results[0] == 0? results[3] == 0: results[3] != 0))){
-            printf("Case: %d --> Result MATCH!!\n", kase);
-        }else{
-            printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
-            break;
-        }
+//        if(results[0] == results[1] && results[1] == results[2] && (results[0] == 0? results[3] == 0: results[3] != 0)){
+//            printf("Case: %d --> Result MATCH!!\n", kase);
+//        }else{
+//            printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
+//            break;
+//        }
 
 
 //        auto begin1 = std::chrono::high_resolution_clock::now();
@@ -231,13 +248,26 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        }
 
         /// de-allocate memories
-        delete[] str1;
-        delete[] str2;
+        //delete[] str1;
+        //delete[] str2;
+
+        /// show progress bar
+        std::cout << "[";
+        int numberOfBarsToShow = (int)(kase * 100.0 / testCase);
+        for(int i=0; i<numberOfBarsToShow; i++){
+            std::cout<<"=";
+        }
+        for(int i=0; i<(100-numberOfBarsToShow); i++){
+            std::cout<<" ";
+        }
+        std::cout<<"] ";
+        std::cout<<numberOfBarsToShow<<" %\r";
+        std::cout.flush();
     }
 
     printf("Total Char Length checked: %lld\n", totalLength);
     for(int i=0; i<number_of_solutions; i++){
-        printf("(%d): Total time needed %lld\n", i, totalTime[i]);
+        printf("Total time needed %lld --> (%s)\n", totalTime[i], getNameBySolution(i).c_str());
     }
 
 
