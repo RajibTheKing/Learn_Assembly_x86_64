@@ -3,11 +3,12 @@
 
 #include "assembly_wrapper.h"
 #include "utility.h"
+extern int compareCharByCharCaseInsensitive(const char *str1, const char* str2, size_t len);
 
 class AnalyzeSolution
 {
 public:
-    AssemblyWrapper *assemblyWrapper = nullptr;
+    AssemblyWrapper *assemblyWrapper = AssemblyWrapper::getInstance();
     Utility *utility = nullptr;
 
     AnalyzeSolution();

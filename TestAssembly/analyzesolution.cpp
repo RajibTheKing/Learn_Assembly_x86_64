@@ -3,7 +3,6 @@
 
 AnalyzeSolution::AnalyzeSolution()
 {
-    assemblyWrapper = new AssemblyWrapper();
     utility = new Utility();
     char c = 'h';
     char d = ANG::string::toUpper(c);
@@ -12,7 +11,6 @@ AnalyzeSolution::AnalyzeSolution()
 
 AnalyzeSolution::~AnalyzeSolution()
 {
-    delete assemblyWrapper;
     delete utility;
 }
 
@@ -146,13 +144,34 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    //long totalTime1, totalTime2, totalTime3;
+
+    int number_of_solutions = 4;
+
+    //Initialize Function Pointer for all solutions
+    int (*solutions[number_of_solutions])(const char *, const char *, size_t);
+    solutions[0] = strncasecmp;
+    solutions[1] = compareCharByCharCaseInsensitive;
+    solutions[2] = compare_string_case_insensitive;
+    solutions[3] = i_case_compare;
+
+    long long totalTime[number_of_solutions];
+    for(int i=0; i<number_of_solutions; i++){
+        totalTime[i]  = 0;
+    }
+    long long totalLength = 0;
+
+    int results[number_of_solutions];
+
     int testCase = 100;
     int kase = 0;
+
+
+
     while(kase++ < testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 10000 + rand() % 331;
+        unsigned int len = 1 ; //+ rand() % 15;
+        totalLength+=len;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
@@ -174,38 +193,35 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             printf("str2 = %s\n", str2);
         }
 
-        /// Start measuring time
+        /// Start Checking the Results and Measuring Execution time for each solution
+        for(int i=0; i<number_of_solutions; i++)
+        {
+            auto begin = std::chrono::high_resolution_clock::now();
+            auto cmpRes = solutions[i](reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
+            auto end = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+            std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<i<<") --> "<<cmpRes<< std::endl;
+
+            totalTime[i] += elapsed.count();
+            results[i] = cmpRes;
+            results[i] = results[i] > 127 ? results[i] - 256 : results[i];
+
+        }
+
+        if(results[0] == results[1] && results[1] == results[2] && ((results[0] == 0? results[3] == 0: results[3] != 0))){
+            printf("Case: %d --> Result MATCH!!\n", kase);
+        }else{
+            printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
+            break;
+        }
+
+
 //        auto begin1 = std::chrono::high_resolution_clock::now();
 //        // Source: https://linux.die.net/man/3/strcasecmp
 //        auto cmpRes1 = strncasecmp(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
 //        auto end1 = std::chrono::high_resolution_clock::now();
 //        auto elapsed1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - begin1);
 
-
-        auto begin2 = std::chrono::high_resolution_clock::now();
-        auto cmpRes2 = utility->compareCharByCharCaseInsensitive(str1, str2, len);
-        auto end2 = std::chrono::high_resolution_clock::now();
-        auto elapsed2 = std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin2);
-
-        auto begin3 = std::chrono::high_resolution_clock::now();
-        auto cmpRes3 = assemblyWrapper->compareStringCaseinsensitive(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
-        auto end3 = std::chrono::high_resolution_clock::now();
-        auto elapsed3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end3 - begin3);
-
-        auto begin4 = std::chrono::high_resolution_clock::now();
-        auto cmpRes4 = assemblyWrapper->iCaseCompare(reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
-        auto end4 = std::chrono::high_resolution_clock::now();
-        auto elapsed4 = std::chrono::duration_cast<std::chrono::nanoseconds>(end4 - begin4);
-
-        /// show the execution time comparisons
-//        printf("strcasecmp = %d\n", cmpRes1);
-        printf("Naive                       = %d\n", cmpRes2);
-        printf("assembly                    = %d\n", cmpRes3);
-        printf("assembly(without tail_loop) = %d\n", cmpRes4);
-//        std::cout<<"Execution time measured: " << elapsed1.count() << " Nanoseconds" << std::endl;
-        std::cout<<"Execution time measured: " << elapsed2.count() << " Nanoseconds" << std::endl;
-        std::cout<<"Execution time measured: " << elapsed3.count() << " Nanoseconds" << std::endl;
-        std::cout<<"Execution time measured: " << elapsed4.count() << " Nanoseconds" << std::endl;
 
 //        /// show the strings again to check if the characters are modified after any funciton calls
 //        if(len <=100)
@@ -217,13 +233,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         /// de-allocate memories
         delete[] str1;
         delete[] str2;
+    }
 
-        if(cmpRes2 == cmpRes3 && (cmpRes2 == 0? cmpRes4 == 0: cmpRes4 != 0)){
-            printf("Case: %d --> Result MATCH!!\n", kase);
-        }else{
-            printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
-            break;
-        }
+    printf("Total Char Length checked: %lld\n", totalLength);
+    for(int i=0; i<number_of_solutions; i++){
+        printf("(%d): Total time needed %lld\n", i, totalTime[i]);
     }
 
 

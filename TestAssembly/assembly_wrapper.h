@@ -11,13 +11,17 @@ extern "C"
     void packed_suturation_test(unsigned char *inData, unsigned char *outData);
     unsigned int search_substr(unsigned char *inStr, unsigned char *subStr);
     unsigned int compare_string(unsigned char *str1, unsigned char *str2, unsigned int str1len, unsigned int str2len);
-    int compare_string_case_insensitive(const char *str1, const char *str2, unsigned int len);
+    int compare_string_case_insensitive(const char *str1, const char *str2, size_t len);
     int test_movdqa_x86_64(const char *lhs, const char *rhs, unsigned int len);
-    int i_case_compare(const char *lhs, const char *rhs, unsigned int len);
+    int i_case_compare(const char *lhs, const char *rhs, size_t len);
 }
 
 class AssemblyWrapper{
 public:
+    static AssemblyWrapper* getInstance(){
+        static AssemblyWrapper *instance = new AssemblyWrapper();
+        return instance;
+    }
     unsigned int getSum(unsigned int &a, unsigned int &b);
     void packedSaturationTest(unsigned char *inData, unsigned char *outData);
     unsigned int searchSubstr(unsigned char *inStr, unsigned char* subStr);
@@ -25,6 +29,8 @@ public:
     int compareStringCaseinsensitive(const char *str1, const char *str2, unsigned int len);
     int testMovdqa(const char *lhs, const char *rhs, unsigned int len);
     int iCaseCompare(const char *lhs, const char *rhs, unsigned int len);
+private:
+    AssemblyWrapper(){}
 };
 
 #endif
