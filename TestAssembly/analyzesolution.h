@@ -23,6 +23,7 @@ public:
     void analyzeStringCompareCaseinsensitive();
     void analyzeMovdqa();
     std::string getNameBySolution(int n);
+    void showProgressBar(int totalElements, int alreadyCompleted);
 
 
 };

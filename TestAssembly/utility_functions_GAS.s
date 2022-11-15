@@ -119,23 +119,21 @@ head_loop:
     add         $16,         %rsi               # skip the pointer by 8 bytes
 
     /* Converting str1 to Lower */
-    pcmpistrm   $0x44,      %xmm12, %xmm10       # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
+    pcmpistrm   $0x44,      %xmm10, %xmm12       # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
     pand        %xmm13,     %xmm0               # TO_ADD: CHARACTER_DIFF & MASK
-    movdqu      %xmm10,     %xmm14              # COPY: xmm10 --> xmm14
-    paddb       %xmm0,      %xmm14              # LOWER: TO_ADD + COPY --> xmm14
+    paddb       %xmm0,      %xmm10              # LOWER: TO_ADD + COPY --> xmm10
 
     /* Converting str2 to Lower */
-    pcmpistrm   $0x44,      %xmm12, %xmm11      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
+    pcmpistrm   $0x44,      %xmm11, %xmm12      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0
     pand        %xmm13,     %xmm0               # TO_ADD: CHARACTER_DIFF & MASK
-    movdqu      %xmm11,     %xmm15              # COPY: xmm11 --> xmm15
-    paddb       %xmm0,      %xmm15              # LOWER: TO_ADD + COPY --> xmm15
+    paddb       %xmm0,      %xmm11              # LOWER: TO_ADD + COPY --> xmm11
 
 
 
     /* Check str1 and str2 are identical or not */
-    pcmpistrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
-    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
-    sub         $0x00,      %r8                 # check the output after pcmpistrm comparison
+    pcmpistrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
+    movq        %xmm0,      %r12                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
+    sub         $0x00,      %r12                 # check the output after pcmpistrm comparison
     jz          head_loop
     jnz         prepare_intermediate_mismatch
 
@@ -152,19 +150,17 @@ explicit_length_compare:
 
     pcmpestrm   $0x44,      %xmm10, %xmm12
     pand        %xmm13,     %xmm0
-    movdqu      %xmm10,     %xmm14
-    paddb       %xmm0,      %xmm14
+    paddb       %xmm0,      %xmm10
 
     pcmpestrm   $0x44,      %xmm11, %xmm12
     pand        %xmm13,     %xmm0
-    movdqu      %xmm11,     %xmm15
-    paddb       %xmm0,      %xmm15
+    paddb       %xmm0,      %xmm11
 
     movq %rdx, %rax
-    pcmpestrm   $0x18,      %xmm14, %xmm15      # compare two sse register completely equal or not
-    movq        %xmm0,      %r8                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
+    pcmpestrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
+    movq        %xmm0,      %r12                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     pop %rax
-    sub         $0x00,      %r8
+    sub         $0x00,      %r12
     jz          return_result_match
     jnz         tail_loop
 
@@ -222,6 +218,7 @@ return_result_match:
 test_movdqa_x86_64:
     movdqu (%rax), %xmm11
     movdqu (%rsi), %xmm12
+#    movdq $0, %xmm11
 #    loadss        $0x5A41,        %xmm12
     subps %xmm11, %xmm12
 
