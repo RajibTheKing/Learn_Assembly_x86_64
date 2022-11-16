@@ -6,6 +6,7 @@ assembly_wrapper.h
 cType.inl
 common.h
 iCaseCompare.s
+iCaseCompare_v2.s
 main.cpp
 utility.cpp
 utility.h

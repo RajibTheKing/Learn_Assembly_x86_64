@@ -14,6 +14,7 @@ extern "C"
     int compare_string_case_insensitive(const char *str1, const char *str2, size_t len);
     int test_movdqa_x86_64(const char *lhs, const char *rhs, unsigned int len);
     int i_case_compare(const char *lhs, const char *rhs, size_t len);
+    int i_case_compare_v2(const char *lhs, const char *rhs, size_t len);
 }
 
 class AssemblyWrapper{

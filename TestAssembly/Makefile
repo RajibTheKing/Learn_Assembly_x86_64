@@ -2,7 +2,8 @@ CC=g++ -std=c++20
 NASM=nasm
 NASMFILES=utility_functions.asm
 GASFILES=utility_functions_GAS.s \
-         iCaseCompare.s
+         iCaseCompare.s \
+		 iCaseCompare_v2.s
 
 CPPFILES=assembly_wrapper.cpp \
 		main.cpp \
@@ -16,6 +17,7 @@ OBJFILES=assembly_wrapper.o \
 		utility_functions_GAS.o \
 		utility_functions.o \
 		iCaseCompare.o \
+		iCaseCompare_v2.o
 
 TARGET=test_assembly
 

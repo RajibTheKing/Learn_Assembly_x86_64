@@ -50,13 +50,16 @@ std::string AnalyzeSolution::getNameBySolution(int n){
         return "strcasecmp";
         break;
     case 1:
-        return "C++ Naive";
+        return "C++ Naive Solution";
         break;
     case 2:
-        return "assembly with ordering";
+        return "assembly ";
         break;
     case 3:
         return "assembly without ordering";
+        break;
+    case 4:
+        return "assembly without ordering v2";
         break;
     default:
         return "No Solution by this number";
@@ -179,7 +182,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
 
-    int number_of_solutions = 4;
+    int number_of_solutions = 5;
 
     //Initialize Function Pointer for all solutions
     int (*solutions[number_of_solutions])(const char *, const char *, size_t);
@@ -187,6 +190,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     solutions[1] = compareCharByCharCaseInsensitive;
     solutions[2] = compare_string_case_insensitive;
     solutions[3] = i_case_compare;
+    solutions[4] = i_case_compare_v2;
+
 
     long long totalTime[number_of_solutions];
     for(int i=0; i<number_of_solutions; i++){
@@ -196,7 +201,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
     int results[number_of_solutions];
 
-    int testCase = 10000;
+    int testCase = 1000;
     int kase = 0;
 
 
@@ -210,11 +215,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-//        /// change a random byte to make expected equal false
-//        unsigned int randomByte = rand() % len;
-//        int offset = 5 - (rand() % 10);
-//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-//        str2[randomByte] += offset;
+        /// change a random byte to make expected equal false
+        unsigned int randomByte = rand() % len;
+        int offset = 5 - (rand() % 10);
+        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
@@ -242,7 +247,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
         }
 
-        if(results[0] == results[1] && results[1] == results[2] && (results[0] == 0? results[3] == 0: results[3] != 0)){
+        if(results[0] == results[1] && results[1] == results[2] &&
+                (results[0] == 0? results[3] == 0: results[3] != 0) && (results[3] == results[4]) ){
             printf("Case: %d --> Result MATCH!!\n", kase);
         }else{
             printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
