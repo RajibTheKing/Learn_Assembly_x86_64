@@ -215,7 +215,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     unsigned int startingLength = 10000;
     for(int i=0; i<100; i++){
         length.push_back(startingLength);
-        startingLength+=10000;
+        startingLength+=50000;
     }
     int testCase = length.size();
     myfile<<testCase<<"\n";
