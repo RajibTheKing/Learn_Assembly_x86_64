@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <string_view>
 #include <typeinfo>
+#include <vector>
+#include <fstream>
 
 #include <stdio.h>
 #include <string.h>

@@ -10,6 +10,7 @@ class AnalyzeSolution
 public:
     AssemblyWrapper *assemblyWrapper = AssemblyWrapper::getInstance();
     Utility *utility = nullptr;
+    std::ofstream myfile;
 
     AnalyzeSolution();
     ~AnalyzeSolution();

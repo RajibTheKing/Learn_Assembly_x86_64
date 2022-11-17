@@ -4,6 +4,9 @@
 AnalyzeSolution::AnalyzeSolution()
 {
     utility = new Utility();
+    std::string filePath = "/home/rajib/Desktop/Learn_Assembly(x86_64)/Plot_Graph/execution_time_data.txt";
+    myfile.open(filePath.c_str());
+
 }
 
 AnalyzeSolution::~AnalyzeSolution()
@@ -47,21 +50,18 @@ void AnalyzeSolution::showProgressBar(int totalElements, int alreadyCompleted)
 std::string AnalyzeSolution::getNameBySolution(int n){
     switch (n) {
     case 0:
-        return "strcasecmp";
-        break;
-    case 1:
         return "C++ Naive Solution";
         break;
-    case 2:
+    case 1:
         return "pcmpistrm + pcmpestrm + ordering";
         break;
-    case 3:
+    case 2:
         return "pcmpistrm + pcmpestrm";
         break;
-    case 4:
+    case 3:
         return "pcmpestrm";
         break;
-    case 5:
+    case 4:
         return "2 x 64 bit sub";
         break;
     default:
@@ -185,16 +185,23 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
 
-    int number_of_solutions = 6;
+    int number_of_solutions = 5;
+    myfile<<number_of_solutions<<"\n";
+    for(int i=0; i<number_of_solutions; i++){
+        myfile<<getNameBySolution(i)<<"\n";
+    }
 
     //Initialize Function Pointer for all solutions
     int (*solutions[number_of_solutions])(const char *, const char *, size_t);
-    solutions[0] = strncasecmp;
-    solutions[1] = compareCharByCharCaseInsensitive;
-    solutions[2] = i_case_compare_v1;
-    solutions[3] = i_case_compare_v2;
-    solutions[4] = i_case_compare_v3;
-    solutions[5] = i_case_compare_v4;
+
+    solutions[0] = compareCharByCharCaseInsensitive;
+    solutions[1] = i_case_compare_v1;
+    solutions[2] = i_case_compare_v2;
+    solutions[3] = i_case_compare_v3;
+    solutions[4] = i_case_compare_v4;
+
+
+    //solutions[0] = strncasecmp;
 
 
     long long totalTime[number_of_solutions];
@@ -204,27 +211,33 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     long long totalLength = 0;
 
     int results[number_of_solutions];
-
-    int testCase = 10;
+    std::vector<unsigned int> length;
+    unsigned int startingLength = 10000;
+    for(int i=0; i<100; i++){
+        length.push_back(startingLength);
+        startingLength+=10000;
+    }
+    int testCase = length.size();
 
     int kase = 0;
 
 
 
-    while(kase++ < testCase)
+    while(kase < testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 1000 + rand() % 16;
+        unsigned int len = length[kase] + rand() % 16;
+        myfile<<len<<"\n";
         totalLength+=len;
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-        /// change a random byte to make expected equal false
-        unsigned int randomByte = rand() % len;
-        int offset = 5 - (rand() % 10);
-        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-        str2[randomByte] += offset;
+//        /// change a random byte to make expected equal false
+//        unsigned int randomByte = rand() % len;
+//        int offset = 5 - (rand() % 10);
+//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+//        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
@@ -250,16 +263,39 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             results[i] = cmpRes;
             results[i] = results[i] > 127 ? results[i] - 256 : results[i];
 
+            if(i)
+                myfile<<" "<<elapsed.count();
+            else
+                myfile<<elapsed.count();
+
+        }
+        myfile<<"\n";
+
+        bool flag = true;
+        if(results[0] == 0)
+        {
+            for(int i=1; i<number_of_solutions; i++){
+                flag &= (results[i] == 0);
+            }
+        }
+        else
+        {
+            flag &= results[0] == results[1];
+            for(int i=2; i<number_of_solutions; i++){
+                flag &= (results[i] != 0);
+            }
         }
 
-        if(results[0] == results[1] && results[1] == results[2] &&
-                (results[0] == 0? results[3] == 0: results[3] != 0) &&
-                (results[3] == results[4] && results[4] == results[5]) ){
-            printf("Case: %d --> Result MATCH!!\n", kase);
-        }else{
+        if(flag)
+        {
+            printf("Case: %d --> Result Matched\n", kase);
+        }
+        else
+        {
             printf("Case: %d --> MISMATCH FOUND!!!!\n", kase);
             break;
         }
+
 
 
 //        auto begin1 = std::chrono::high_resolution_clock::now();
@@ -279,6 +315,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         // de-allocate memories
         delete[] str1;
         delete[] str2;
+        kase++;
 
 //        /// show progress bar
 //        showProgressBar(testCase, kase);
@@ -288,6 +325,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     for(int i=0; i<number_of_solutions; i++){
         printf("Total time needed %lld --> (%s)\n", totalTime[i], getNameBySolution(i).c_str());
     }
+
+    myfile.close();
 
 
 }
