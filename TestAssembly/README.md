@@ -297,11 +297,11 @@
     | 4960005 |16425828 |705967 |705029 |1408814 |677117 |
 
   
-- Here showing the graph using Naive and pcmpistrm + pcmpestrm + ordering
+- Here showing the graph using Naive and pcmpistrm + pcmpestrm + ordering (Time: 28 October, 2022)
 ![alt text](../images/Graph_Execution_Time.png)
 
-- Here showing the graph with all approaches
+- Here showing the graph with all approaches (Time: 17 November, 2022, 15:03)
 ![alt text](../images/Graph_Execution_Time_17112022.png)
 
-- Here showing the graph with all approaches except Naive Solution
+- Here showing the graph with all approaches except Naive Solution (Time: 17 November, 2022, 15:03)
 ![alt text](../images/Graph_Execution_time_without_Naive_17112022.png)
