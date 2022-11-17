@@ -218,6 +218,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         startingLength+=10000;
     }
     int testCase = length.size();
+    myfile<<testCase<<"\n";
 
     int kase = 0;
 
