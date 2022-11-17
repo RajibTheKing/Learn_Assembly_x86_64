@@ -5,8 +5,10 @@ assembly_wrapper.cpp
 assembly_wrapper.h
 cType.inl
 common.h
-iCaseCompare.s
+iCaseCompare_v1.s
 iCaseCompare_v2.s
+iCaseCompare_v3.s
+iCaseCompare_v4.s
 main.cpp
 utility.cpp
 utility.h

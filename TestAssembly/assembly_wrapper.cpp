@@ -219,10 +219,35 @@ int AssemblyWrapper::compareStringCaseinsensitive(const char *lhs, const char *r
 int AssemblyWrapper::testMovdqa(const char *lhs, const char *rhs, unsigned int len){
     printf("Inside wrapper: address of lhs = %p\n",lhs);
     printf("Inside wrapper: address of rhs = %p, diff = %d\n",rhs, int(rhs-lhs));
-    return test_movdqa_x86_64(lhs, rhs, len);
-}
+    unsigned char *shf = new unsigned char[16];
+    for(int i=0; i<16; i++){
+        shf[i] = i;
+    }
+    int result;
 
-int AssemblyWrapper::iCaseCompare(const char *lhs, const char *rhs, unsigned int len){
-    int result = i_case_compare(lhs, rhs, len);
-    return result;
+    ASM(
+//            pslldq       %4,  %%xmm10;
+
+        r1:
+            and         $0xFF,          %%r13;
+            movl        %%r13d,         %0;
+            jmp end_func;
+
+        r2:
+            movl        $0,             %0;
+        e2:
+        )
+        : /// output operands
+            "=r" (result)                                       // %0
+        : /// input operands
+            "r" (lhs),                                          // %1
+            "r" (rhs),                                          // %2
+            "r" (len),                                          // %3
+            "r" (shf)                                           // %4
+        : /// clobber
+            "%xmm0", "%xmm10", "%xmm11", "%xmm12", "%xmm13","%xmm14", "%xmm15", "%rax", "%rdx", "%r8", "%r12", "%r14", "%r13", "memory"
+
+    );
+
+    return test_movdqa_x86_64(lhs, rhs, len);
 }

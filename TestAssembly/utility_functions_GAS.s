@@ -1,6 +1,5 @@
-
+.section .text
 .global sub_check_x86_64
-.text
 sub_check_x86_64:
     mov $15, %rdx
     sub $16, %rdx
@@ -14,9 +13,8 @@ getsum_x86_64_GAS:
     add         (%rdx),     %rax            # add value of rdx with rax
     ret
 
-
+.section .text
 .global packed_suturation_test
-.text
 packed_suturation_test:
     #load 128 bit inData into register xmm9
     movq        (%rcx),     %xmm9           # move first 64 bit to xmm9 register(SSE)
@@ -70,8 +68,8 @@ search_substr:
     ret
 
 
+.section .text
 .global compare_string                          # parameters are in *str1 = rax,  *str2 = rsi, str1len = rcx, str2len = rdx
-.text
 compare_string:
 
 loop_label:
@@ -97,9 +95,8 @@ return_match:
     ret
 
 
-
+.section .text
 .global compare_string_case_insensitive         # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
-.text
 compare_string_case_insensitive:
     /*Prepare some constant*/
     movq        $0x5A41,     %r12               #A: 0x41, Z: 0x5A --> defining Range
@@ -213,14 +210,16 @@ return_result_match:
 
 
 
+.section .text
 .global test_movdqa_x86_64         # parameters are in *lhs = rax,  *rhs = rsi, len = rdx
-.text
 test_movdqa_x86_64:
     movdqu (%rax), %xmm11
     movdqu (%rsi), %xmm12
 #    movdq $0, %xmm11
 #    loadss        $0x5A41,        %xmm12
     subps %xmm11, %xmm12
+#    psllq $a,  %xmm10
 
+#    mov     $format, %rdi
     mov $0, %rax
     ret
