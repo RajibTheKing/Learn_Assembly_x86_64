@@ -7,8 +7,9 @@ class GraphGenerator:
         self.filePtr = open(self.fileName, "r")
         self.filePtr2 = open(self.fileNameToWrite, "w+")
         self.readFromFile()
-        self.generateGraph()
         self.generateMarkdownTable()
+        self.generateGraph()
+        
     
     def readFromFile(self):
         self.numberOfSolution = int(self.filePtr.readline())
@@ -43,7 +44,7 @@ class GraphGenerator:
         print(self.lengths)
         x =  self.lengths
 
-        for i in range(1, self.numberOfSolution):
+        for i in range(0, self.numberOfSolution):
             y = self.execution_time[i]
             plt.plot(x, y, marker='.', label = self.solutions[i])
 
