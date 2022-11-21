@@ -5,3 +5,6 @@
 *.lib
 .qtc_clangd
 test_assembly
+execution_time_data.txt
+table.md
+

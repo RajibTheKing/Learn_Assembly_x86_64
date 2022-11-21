@@ -40,12 +40,10 @@ loop:
     skip:
     /* Check str1 and str2 are identical or not */
     pcmpestrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
-    movq        %xmm0,      %r12                # move the result of xmm0 register to r12 register (temp) to perform cmp instruction
-    sub         $0x00,      %r12                # check the output after pcmpistrm comparison
 
     /* Restore the value of %rax from the stack */
     pop %rax
-    jnz         return_result_mismatch
+    jc         return_result_mismatch
     sub         $16,        %rdx
     jle         return_result_match
     jmp loop

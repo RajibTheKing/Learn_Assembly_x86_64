@@ -217,17 +217,17 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 1000; //length.size();
+    int testCase = 10000; //length.size();
     myfile<<testCase<<"\n";
 
-    int kase = 0;
+    int kase = 1;
 
 
 
-    while(kase < testCase)
+    while(kase <= testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 15;
+        unsigned int len = 1000+ rand()%16;
         totalLength+=len;
         //myfile<<len<<"\n";
         myfile<<totalLength<<"\n";
@@ -236,11 +236,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-        /// change a random byte to make expected equal false
-        unsigned int randomByte = rand() % len;
-        int offset = 5 - (rand() % 10);
-        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-        str2[randomByte] += offset;
+//        /// change a random byte to make expected equal false
+//        unsigned int randomByte = rand() % len;
+//        int offset = 5 - (rand() % 10);
+//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+//        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
@@ -260,11 +260,13 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             auto cmpRes = solutions[i](reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
             auto end = std::chrono::high_resolution_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-            std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<cmpRes<< std::endl;
+
 
             totalTime[i] += elapsed.count();
             results[i] = cmpRes;
             results[i] = results[i] > 127 ? results[i] - 256 : results[i];
+
+            std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<results[i]<< std::endl;
 
             if(i)
                 myfile<<" "<<totalTime[i]; // elapsed.count();

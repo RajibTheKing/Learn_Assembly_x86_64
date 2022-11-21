@@ -37,10 +37,8 @@ head_loop:
 
     /* Check str1 and str2 are identical or not */
     pcmpistrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
-    movq        %xmm0,      %r12                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
-    sub         $0x00,      %r12                 # check the output after pcmpistrm comparison
-    jz          head_loop
-    jnz         prepare_intermediate_mismatch
+    jnc         head_loop
+    jc         prepare_intermediate_mismatch
 
 prepare_explicit_length:
     add         $16,        %rdx
@@ -63,11 +61,9 @@ explicit_length_compare:
 
     movq %rdx, %rax
     pcmpestrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
-    movq        %xmm0,      %r12                 # move the result of xmm0 register to r8 register (temp) to perform cmp instruction
     pop %rax
-    sub         $0x00,      %r12
-    jz          return_result_match
-    jnz         tail_loop
+    jnc          return_result_match
+    jc         tail_loop
 
 prepare_intermediate_mismatch:
     sub         $16,         %rax
