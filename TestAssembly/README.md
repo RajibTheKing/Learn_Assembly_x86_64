@@ -193,7 +193,7 @@
     | Output: Input + toAdd | o     | n     | c     | e     |       | u     | p     | o     | n     |       | a     |       | t     | i     | m     | e     |
 
 - Here given the execution time (in Nanoseconds) C++ vs Assembly:
- [click here to view data](table_paragraph_test(28-10-2022).md)
+ [click here to view data](table_paragraph_test(28-Oct-2022).md)
 
   
 - Here showing the graph using Naive and pcmpistrm + pcmpestrm + ordering (Time: 28 October, 2022)
@@ -216,3 +216,12 @@
  
 - Here showing the graph with all approaches only for 15 bytes of character also randomly changed a byte to force mismatch (Time: 18 November, 2022, 12:58)
 ![alt text](../images/Graph_Execution_Time_15byte.png)
+
+- After removing superfluous operation (extra sub operation just to check ZFlag) 16 byte test (21-11-2022):
+[click here to view data](table_16_byte_test(21-11-2022).md)
+![alt text](../images/Graph_Execution_Time_15byte(21-11-2022).png)
+
+
+- After removing superfluous operation (extra sub operation just to check ZFlag) 64 byte test (21-11-2022):
+[click here to view data](table_64_byte_test(21-11-2022).md)
+![alt text](../images/Graph_Execution_Time_64byte(21-11-2022).png)
