@@ -1,6 +1,5 @@
 /*
-maintains ordering
-with tail loop
+pcmpistrm + pcmpestrm + ordering
 */
 
 .section .text

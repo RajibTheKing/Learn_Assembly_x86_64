@@ -222,8 +222,6 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
     int kase = 1;
 
-
-
     while(kase <= testCase)
     {
         /// Generate two strings with random characters

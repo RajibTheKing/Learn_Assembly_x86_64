@@ -1,5 +1,5 @@
 /*
-pcmpistrm + pcmpestrm
+2 x 64 bit sub
 */
 
 .section .data
