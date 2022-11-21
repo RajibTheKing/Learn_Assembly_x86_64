@@ -218,7 +218,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 10; //length.size();
+    int testCase = 1000; //length.size();
     myfile<<testCase<<"\n";
 
     int kase = 1;
@@ -226,7 +226,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     while(kase <= testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 1000+ ANG::tools::random::next()%16;
+        unsigned int len = 48 + ANG::tools::random::next()%16;
         totalLength+=len;
         //myfile<<len<<"\n";
         myfile<<totalLength<<"\n";
