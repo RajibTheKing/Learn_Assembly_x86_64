@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 
 class GraphGenerator:
     def __init__(self):
-        self.fileName = "/home/rajib/Desktop/Learn_Assembly(x86_64)/Plot_Graph/execution_time_data.txt"
-        self.fileNameToWrite = "/home/rajib/Desktop/Learn_Assembly(x86_64)/Plot_Graph/table.md"
+        self.fileName = "./execution_time_data.txt"
+        self.fileNameToWrite = "./table.md"
         self.filePtr = open(self.fileName, "r")
         self.filePtr2 = open(self.fileNameToWrite, "w+")
         self.readFromFile()

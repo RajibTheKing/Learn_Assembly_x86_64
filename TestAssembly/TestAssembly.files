@@ -1,3 +1,4 @@
+Macros.h
 Makefile
 analyzesolution.cpp
 analyzesolution.h
@@ -5,11 +6,13 @@ assembly_wrapper.cpp
 assembly_wrapper.h
 cType.inl
 common.h
+custom_random.h
 iCaseCompare_v1.s
 iCaseCompare_v2.s
 iCaseCompare_v3.s
 iCaseCompare_v4.s
 main.cpp
+std.extensions.h
 utility.cpp
 utility.h
 utility_functions.asm

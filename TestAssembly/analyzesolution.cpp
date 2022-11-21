@@ -1,5 +1,6 @@
 #include "analyzesolution.h"
 #include "cType.inl"
+#include "custom_random.h"
 
 AnalyzeSolution::AnalyzeSolution()
 {
@@ -53,16 +54,16 @@ std::string AnalyzeSolution::getNameBySolution(int n){
         return "C++ Naive Solution";
         break;
     case 1:
-        return "pcmpistrm + pcmpestrm + ordering";
+        return "pcmpistrm + pcmpestrm + ordering (iCaseCompare_v1)";
         break;
     case 2:
-        return "pcmpistrm + pcmpestrm";
+        return "pcmpistrm + pcmpestrm (iCaseCompare_v2)";
         break;
     case 3:
-        return "pcmpestrm";
+        return "pcmpestrm (iCaseCompare_v3)";
         break;
     case 4:
-        return "2 x 64 bit sub";
+        return "2 x 64 bit sub (iCaseCompare_v4)";
         break;
     default:
         return "No Solution by this number";
@@ -217,7 +218,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 10000; //length.size();
+    int testCase = 10; //length.size();
     myfile<<testCase<<"\n";
 
     int kase = 1;
@@ -225,7 +226,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     while(kase <= testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 1000+ rand()%16;
+        unsigned int len = 1000+ ANG::tools::random::next()%16;
         totalLength+=len;
         //myfile<<len<<"\n";
         myfile<<totalLength<<"\n";
@@ -234,11 +235,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-//        /// change a random byte to make expected equal false
-//        unsigned int randomByte = rand() % len;
-//        int offset = 5 - (rand() % 10);
-//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-//        str2[randomByte] += offset;
+        /// change a random byte to make expected equal false
+        unsigned int randomByte = ANG::tools::random::next() % len;
+        int offset = 5 - (ANG::tools::random::next() % 10);
+        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
