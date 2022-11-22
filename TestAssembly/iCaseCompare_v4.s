@@ -99,72 +99,20 @@ part1:
     movhlps     %xmm11,     %xmm11
 
 part2:
-    cmp $1, %rdx
-    jz shift_7;
-    cmp $2, %rdx
-    jz shift_6;
-    cmp $3, %rdx
-    jz shift_5;
-    cmp $4, %rdx
-    jz shift_4;
-    cmp $5, %rdx
-    jz shift_3;
-    cmp $6, %rdx
-    jz shift_2;
-    cmp $7, %rdx
-    jz shift_1;
 
-shift_0:
-    pslldq     $0,   %xmm10
-    pslldq     $0,   %xmm11
-    jmp calculation
-shift_1:
-    pslldq     $1,   %xmm10
-    pslldq     $1,   %xmm11
-    jmp calculation
-shift_2:
-    pslldq     $2,   %xmm10
-    pslldq     $2,   %xmm11
-    jmp calculation
-shift_3:
-    pslldq     $3,   %xmm10
-    pslldq     $3,   %xmm11
-    jmp calculation
-shift_4:
-    pslldq     $4,   %xmm10
-    pslldq     $4,   %xmm11
-    jmp calculation
-shift_5:
-    pslldq     $5,   %xmm10
-    pslldq     $5,   %xmm11
-    jmp calculation
-shift_6:
-    pslldq     $6,   %xmm10
-    pslldq     $6,   %xmm11
-    jmp calculation
-shift_7:
-    pslldq     $7,   %xmm10
-    pslldq     $7,   %xmm11
-    jmp calculation
-
-calculation:
-    /* Now check upper 64 bit after mov */
     movq        %xmm10,     %r12
     movq        %xmm11,     %r13
+
+    /* Prepare count and shift logically left to handle garbage */
+    movq        $8,         %rcx
+    sub         %rdx,       %rcx
+    shlq        $3,         %rcx
+
+    shlq        %cl,        %r12
+    shlq        %cl,        %r13
     sub         %r12,       %r13
     jnz         return_result_mismatch
     jz          return_result_match
-
-
-
-
-    /*Some Testing Code to use pslldq using constant data Array*/
-#   values(, %edi, 4)
-#    movl        value,          %ecx
-#    movb        $3,             %r15b
-    movb        S,  %r14b
-#    movb $S, %r15b
-#    pslldq      S(, %edi, 1),   %xmm10
 
 
 return_result_mismatch:

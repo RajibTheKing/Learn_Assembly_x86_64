@@ -226,7 +226,8 @@ int AssemblyWrapper::testMovdqa(const char *lhs, const char *rhs, unsigned int l
     int result;
 
     ASM(
-//            pslldq       %4,  %%xmm10;
+        //            pslldq       %4,  %%xmm10;
+            vpslldq       $4, %%xmm15,  %%xmm10;
 
         r1:
             and         $0xFF,          %%r13;
