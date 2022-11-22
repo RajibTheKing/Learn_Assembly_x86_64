@@ -1,17 +1,18 @@
 /*
-pcmpistrm + pcmpestrm
+    pcmpistrm + pcmpestrm
+    \attention not sutiable for ordering/sorting texts
 */
 
 .section .text
-.global i_case_compare_v2                          # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
+.global i_case_compare_v2                       # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
 i_case_compare_v2:
-    /*Prepare some constant*/
-    movq        $0x5A41,     %r12               #A: 0x41, Z: 0x5A --> defining Range
-    movq        %r12,        %xmm12             #CHARACTER_RANGE
+    /* Prepare some constant */
+    movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
+    movq        %r12,        %xmm12             # CHARACTER_RANGE
 
-    movq        $0x20202020,       %r12         #Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
-    movq        %r12,        %xmm13             #moving diff to SSE register
-    pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
+    movq        $0x20202020,       %r12         # Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
+    movq        %r12,        %xmm13             # moving diff to SSE register
+    pshufd      $0,          %xmm13,  %xmm13    # CHARACTER_DIFF
 
 head_loop:
     sub         $16,        %rdx                # check if all characters are compared
@@ -62,6 +63,7 @@ explicit_length_compare:
 
     movq %rdx, %rax
     pcmpestrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
+
     /* Restore the value of %rax from the stack */
     pop %rax
 

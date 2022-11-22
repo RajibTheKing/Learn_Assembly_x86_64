@@ -1,17 +1,18 @@
 /*
-only pcmpestrm
+    only pcmpestrm
+    \attention not sutiable for ordering/sorting texts
 */
 
 .section .text
-.global i_case_compare_v3                          # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
+.global i_case_compare_v3                       # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
 i_case_compare_v3:
     /*Prepare some constant*/
-    movq        $0x5A41,     %r12               #A: 0x41, Z: 0x5A --> defining Range
-    movq        %r12,        %xmm12             #CHARACTER_RANGE
+    movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
+    movq        %r12,        %xmm12             # CHARACTER_RANGE
 
-    movq        $0x20202020,       %r12         #Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
-    movq        %r12,        %xmm13             #moving diff to SSE register
-    pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
+    movq        $0x20202020, %r12               # Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
+    movq        %r12,        %xmm13             # moving diff to SSE register
+    pshufd      $0,          %xmm13,  %xmm13    # CHARACTER_DIFF
 
 loop:
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)

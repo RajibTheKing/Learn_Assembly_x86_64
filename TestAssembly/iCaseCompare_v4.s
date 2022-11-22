@@ -1,23 +1,18 @@
 /*
-2 x 64 bit sub
+    2 x 64 bit sub
+    \attention not sutiable for ordering/sorting texts
 */
 
-.section .data
-S:
-    .byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F
-value:
-    .long 0x200
-
 .section .text
-.global i_case_compare_v4                          # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
+.global i_case_compare_v4                       # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
 i_case_compare_v4:
     /*Prepare some constant*/
-    movq        $0x5A41,     %r12               #A: 0x41, Z: 0x5A --> defining Range
-    movq        %r12,        %xmm12             #CHARACTER_RANGE
+    movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
+    movq        %r12,        %xmm12             # CHARACTER_RANGE
 
-    movq        $0x20202020,       %r12         #Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
-    movq        %r12,        %xmm13             #moving diff to SSE register
-    pshufd      $0,          %xmm13,  %xmm13    #CHARACTER_DIFF
+    movq        $0x20202020,       %r12         # Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
+    movq        %r12,        %xmm13             # moving diff to SSE register
+    pshufd      $0,          %xmm13,  %xmm13    # CHARACTER_DIFF
 
 head_loop:
     sub         $16,        %rdx                # check if all characters are compared

@@ -1,5 +1,6 @@
 /*
-pcmpistrm + pcmpestrm + ordering
+    pcmpistrm + pcmpestrm
+    sutiable for ordering/sorting texts
 */
 
 .section .text

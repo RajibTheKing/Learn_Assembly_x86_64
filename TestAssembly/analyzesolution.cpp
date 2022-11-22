@@ -235,11 +235,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-//        /// change a random byte to make expected equal false
-//        unsigned int randomByte = ANG::tools::random::next() % len;
-//        int offset = 5 - (ANG::tools::random::next() % 10);
-//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-//        str2[randomByte] += offset;
+        /// change a random byte to make expected equal false
+        unsigned int randomByte = ANG::tools::random::next() % len;
+        int offset = 5 - (ANG::tools::random::next() % 10);
+        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
