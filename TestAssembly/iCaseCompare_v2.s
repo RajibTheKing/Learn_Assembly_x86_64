@@ -19,8 +19,8 @@ head_loop:
 
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $16,         %rax               # skip the pointer by 16 bytes
-    add         $16,         %rsi               # skip the pointer by 16 bytes
+    add         $16,         %rax               # increament the pointer by 16 bytes
+    add         $16,         %rsi               # increament the pointer by 16 bytes
 
     /* Converting str1 to Lower */
     pcmpistrm   $0x44,      %xmm10, %xmm12      # MASK: Compare characters is in range A <= c <= Z and store result bytes in xmm0

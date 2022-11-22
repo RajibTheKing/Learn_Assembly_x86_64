@@ -16,8 +16,8 @@ i_case_compare_v3:
 loop:
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $16,         %rax               # skip the pointer by 16 bytes
-    add         $16,         %rsi               # skip the pointer by 16 bytes
+    add         $16,         %rax               # increament the pointer by 16 bytes
+    add         $16,         %rsi               # increament the pointer by 16 bytes
 
     push %rax
     movq $2, %rax
