@@ -6,7 +6,7 @@
 .section .text
 .global i_case_compare_v4                       # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
 i_case_compare_v4:
-    /*Prepare some constant*/
+    /* Prepare some constant */
     movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
     movq        %r12,        %xmm12             # CHARACTER_RANGE
 

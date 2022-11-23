@@ -225,3 +225,11 @@
 - After removing superfluous operation (extra sub operation just to check ZFlag) 64 byte test (21-11-2022):
 [click here to view data](table_64_byte_test(21-11-2022).md)
 ![alt text](../images/Graph_Execution_Time_64byte(21-11-2022).png)
+
+- 1 to 64 bytes test with all approach (23-Nov-2022):
+[click here to view data](table_1_to_64_bytes_test(23-Nov-2022).md)
+![alt text](../images/Graph_Execution_Time_1_To_64(23-Nov-2022).png)
+
+- 1 to 64 bytes test (Cummulative Sum)with all approach (23-Nov-2022):
+[click here to view data](table_1_to_64_bytes_test_Cumulative(23-Nov-2022).md)
+![alt text](../images/Grpah_Execution_Time_1_To_64_Cumulative(23-Nov-2022).png)

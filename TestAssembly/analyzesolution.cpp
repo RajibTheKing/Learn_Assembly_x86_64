@@ -218,7 +218,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 10000; //length.size();
+    int testCase = 64; //length.size();
     myfile<<testCase<<"\n";
 
     int kase = 1;
@@ -226,20 +226,20 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     while(kase <= testCase)
     {
         /// Generate two strings with random characters
-        unsigned int len = 1000  + ANG::tools::random::next()%16;
+        unsigned int len = kase;
         totalLength+=len;
-        //myfile<<len<<"\n";
-        myfile<<totalLength<<"\n";
+        myfile<<len<<"\n";
+        //myfile<<totalLength<<"\n"; //< cummulative
 
         printf("String Len selected = %d\n", len);
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-        /// change a random byte to make expected equal false
-        unsigned int randomByte = ANG::tools::random::next() % len;
-        int offset = 5 - (ANG::tools::random::next() % 10);
-        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-        str2[randomByte] += offset;
+//        /// change a random byte to make expected equal false
+//        unsigned int randomByte = ANG::tools::random::next() % len;
+//        int offset = 5 - (ANG::tools::random::next() % 10);
+//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+//        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
@@ -268,9 +268,14 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<results[i]<< std::endl;
 
             if(i)
-                myfile<<" "<<totalTime[i]; // elapsed.count();
+            {
+                myfile<<" "<<elapsed.count();
+                //myfile<<" "<<totalTime[i]; //< cummulative
+            }
             else
-                myfile<<totalTime[i]; //elapsed.count();
+            {   myfile<<elapsed.count();
+                //myfile<<totalTime[i]; //< cummulative
+            }
 
         }
         myfile<<"\n";
