@@ -206,10 +206,13 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 
     long long totalTime[number_of_solutions];
+    double totalTimeReal[number_of_solutions];
+
     for(int i=0; i<number_of_solutions; i++){
         totalTime[i]  = 0;
     }
     long long totalLength = 0;
+    int numberOfRepeatition = 10000;
 
     int results[number_of_solutions];
 //    std::vector<unsigned int> length;
@@ -225,7 +228,9 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
     while(kase <= testCase)
     {
-        /// Generate two strings with random characters
+
+
+         /// Generate two strings with random characters
         unsigned int len = kase;
         totalLength+=len;
         myfile<<len<<"\n";
@@ -252,6 +257,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             printf("str2 = %s\n", str2);
         }
 
+        /*
         /// Start Checking the Results and Measuring Execution time for each solution
         for(int i=0; i<number_of_solutions; i++)
         {
@@ -279,6 +285,52 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
         }
         myfile<<"\n";
+        */
+
+        for(int i=0; i<number_of_solutions; i++){
+            totalTimeReal[i] = 0;
+        }
+
+        /// Following code will be used for getting average exectution time with N repeatitions
+        for(int repeatition = 0; repeatition<numberOfRepeatition; repeatition++)
+        {
+            for(int i=0; i<number_of_solutions; i++)
+            {
+                auto begin = std::chrono::high_resolution_clock::now();
+                auto cmpRes = solutions[i](reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
+                auto end = std::chrono::high_resolution_clock::now();
+                auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+
+                totalTimeReal[i] += elapsed.count();
+                results[i] = cmpRes;
+                results[i] = results[i] > 127 ? results[i] - 256 : results[i];
+
+                std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<results[i]<< std::endl;
+
+
+            }
+
+
+        }
+
+        for(int i=0; i<number_of_solutions; i++){
+
+            totalTimeReal[i] = totalTimeReal[i] / numberOfRepeatition; //< Calculating the average execution time
+            if(i)
+            {
+                myfile<<" "<<totalTimeReal[i]; //< average execution time
+            }
+            else
+            {
+                myfile<<totalTimeReal[i]; //< average execution time
+            }
+
+        }
+
+        myfile<<"\n";
+
+
 
         bool flag = true;
         if(results[0] == 0)
@@ -329,6 +381,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        /// show progress bar
 //        showProgressBar(testCase, kase);
     }
+
 
     printf("\nTotal Char Length checked: %lld\n", totalLength);
     for(int i=0; i<number_of_solutions; i++){

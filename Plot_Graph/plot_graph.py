@@ -32,7 +32,7 @@ class GraphGenerator:
             len = int(self.filePtr.readline())
             self.lengths.append(len)
             line = self.filePtr.readline()
-            times = [int(x) for x in line.split()]
+            times = [float(x) for x in line.split()]
             for j in range(0, self.numberOfSolution):
                 self.execution_time[j].append(times[j])
 

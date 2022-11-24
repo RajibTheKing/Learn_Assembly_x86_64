@@ -233,3 +233,7 @@
 - 1 to 64 bytes test (Cummulative Sum)with all approach (23-Nov-2022):
 [click here to view data](table_1_to_64_bytes_test_Cumulative(23-Nov-2022).md)
 ![alt text](../images/Grpah_Execution_Time_1_To_64_Cumulative(23-Nov-2022).png)
+
+- 1 to 64 bytes test With 10,000 repeatition and average execution time (24-Nov-2022):
+[click here to view data](table_1_to_64_bytes_test_10000_rep(24_Nov_2022).md)
+![alt text](../images/Graph_Execution_Time_1_64_10000_Rep(24-Nov-2022).png)
