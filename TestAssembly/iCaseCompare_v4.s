@@ -14,6 +14,9 @@ i_case_compare_v4:
     movq        %r12,        %xmm13             # moving diff to SSE register
     pshufd      $0,          %xmm13,  %xmm13    # CHARACTER_DIFF
 
+    cmp         $0,          %rdx
+    jle         return_result_match
+
 head_loop:
     sub         $16,        %rdx                # check if all characters are compared
     jle         prepare_explicit_length         # ensures that all characters were matched

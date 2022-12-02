@@ -14,6 +14,9 @@ i_case_compare_v3:
     movq        %r12,        %xmm13             # moving diff to SSE register
     pshufd      $0,          %xmm13,  %xmm13    # CHARACTER_DIFF
 
+    cmp         $0,          %rdx
+    jle         return_result_match
+
 loop:
     movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)

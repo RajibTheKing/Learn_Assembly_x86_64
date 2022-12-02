@@ -206,13 +206,14 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 
     long long totalTime[number_of_solutions];
-    double totalTimeReal[number_of_solutions];
+
 
     for(int i=0; i<number_of_solutions; i++){
         totalTime[i]  = 0;
     }
     long long totalLength = 0;
-    int numberOfRepeatition = 10000;
+//    double totalTimeReal[number_of_solutions];
+//    int numberOfRepeatition = 10000;
 
     int results[number_of_solutions];
 //    std::vector<unsigned int> length;
@@ -221,7 +222,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 64; //length.size();
+    int testCase = 10000; //length.size();
     myfile<<testCase<<"\n";
 
     int kase = 1;
@@ -231,7 +232,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 
          /// Generate two strings with random characters
-        unsigned int len = kase;
+        unsigned int len = 1000 + ANG::tools::random::next() % 331;
         totalLength+=len;
         myfile<<len<<"\n";
         //myfile<<totalLength<<"\n"; //< cummulative
@@ -241,7 +242,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
         /// change a random byte to make expected equal false
-        unsigned int randomByte = len-1;//ANG::tools::random::next() % len;
+        unsigned int randomByte = ANG::tools::random::next() % len;
         int offset = 5 - (ANG::tools::random::next() % 10);
         printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
         str2[randomByte] += offset;
@@ -257,7 +258,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             printf("str2 = %s\n", str2);
         }
 
-        /*
+
         /// Start Checking the Results and Measuring Execution time for each solution
         for(int i=0; i<number_of_solutions; i++)
         {
@@ -285,8 +286,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
         }
         myfile<<"\n";
-        */
 
+        /*
         for(int i=0; i<number_of_solutions; i++){
             totalTimeReal[i] = 0;
         }
@@ -329,6 +330,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         }
 
         myfile<<"\n";
+        */
 
 
 

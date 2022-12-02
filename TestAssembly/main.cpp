@@ -1,11 +1,11 @@
 #include "analyzesolution.h"
-
+#include "LessCompare.h"
 
 int compareCharByCharCaseInsensitive(const char *str1, const char* str2, size_t len)
 {
     //not efficient implemnentation ... just a Naive solution
     int i=0, j=0;
-    while(len)
+    while((int)len > 0)
     {
         int diff = tolower(str1[i]) - tolower(str2[i]);
         if(diff != 0)
@@ -21,9 +21,14 @@ int compareCharByCharCaseInsensitive(const char *str1, const char* str2, size_t 
 
 int main()
 {
-    AnalyzeSolution *analyzeSolution = new AnalyzeSolution();
+    //AnalyzeSolution *analyzeSolution = new AnalyzeSolution();
 
-    analyzeSolution->startAnaylizing();
+    // analyzeSolution->startAnaylizing();
+
+    // std::string str1 = "";
+    // std::string str2 = "";
+    // int result = compareCharByCharCaseInsensitive(str1.c_str(), str2.c_str(), 6);
+    // printf("%d\n", result);
 
 
 //    /// Check the behaviors of string_view
@@ -42,6 +47,12 @@ int main()
 //    unsigned int x = 2541;
 
 //    printf("%X\n", x);
+
+
+    /// Checking less Compare
+    std::cout<<ANG::string::LessCompare::isLess("apples")("apple")<<std::endl;
+    std::cout<< (strcmp("apples", "apple") < 0) <<std::endl;
+
 
     return 0;
 }
