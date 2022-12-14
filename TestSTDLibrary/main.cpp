@@ -1,11 +1,30 @@
 #include "iCaseInsenitiveCompare.h"
+#include "iLessCompare.h"
 
 #include <iostream>
 #include <set>
 #include <string>
 #include <string_view>
+#include <cstring>
+using namespace std::literals;
 
 
+
+
+template<typename A, typename B>
+void showSetValues(std::string name, std::set<A, B> current_set){
+    std::cout<<"Show values inside: "<<name<<std::endl;
+    std::cout<<"{";
+    for(auto iterator = current_set.begin(); iterator!= current_set.end(); iterator++){
+        if(iterator == current_set.begin()){
+           std::cout<<"\""<<*iterator<<"\"";
+        }else{
+           std::cout<<", \""<<*iterator<<"\"";
+        }
+
+    }
+    std::cout<<"}\n\n";
+}
 
 int main()
 {
@@ -25,28 +44,25 @@ int main()
         > class set;
     */
 
-    std::set<   std::string_view,      std::less<>,             std::allocator<std::string_view>    > st_standard;
-    std::set<   std::string_view,      CaseInsenitiveCompare,   std::allocator<std::string_view>    > st_custom;
+    using custom_set = std::set<std::string_view, ANG::string::LessCompare>;
+    custom_set st_length{"BeetLe", "Cat", "aPe", "aaa", "bb", "ba", "Ab", "aA", "A", "B"};
+    std::set<   std::string_view,      ANG::string::LessCompareLengthCaseInsensitive  > st_length_insensitive{"BeetLe", "Cat", "aPe", "aaa", "bb", "ba", "Ab", "aA", "A", "B"};
+//    std::set<   std::string_view,      ANG::string::LessCompareAlphabetCaseInsensitive> st_alpha{"BeetLe", "Cat", "aPe", "aaa", "bb", "ba", "Ab", "aA", "A", "B"};
 
-    st_standard.insert("Rob");
-    st_standard.insert("Rajib");
-    st_standard.insert("Tim");
-    st_standard.insert("rob");
 
-    st_custom.insert("Rob");
-    st_custom.insert("Rajib");
-    st_custom.insert("Tim");
-    st_custom.insert("rob");
 
-    std::cout<<"Show values inside: st_standard"<<std::endl;
-    for(auto iterator = st_standard.begin(); iterator!= st_standard.end(); iterator++){
-        std::cout<<*iterator<<std::endl;
-    }
+    showSetValues("st_length", st_length);
+    showSetValues("st_length_insensitive", st_length_insensitive);
+//    showSetValues("st_alpha", st_alpha);
 
-    std::cout<<"Show values inside: st_custom"<<std::endl;
-    for(auto iterator = st_custom.begin(); iterator!= st_custom.end(); iterator++){
-        std::cout<<*iterator<<std::endl;
-    }
+    std::string str("some texts");
+    std::string_view hello_sv(str.c_str());
+
+    std::cout<<"hello_sv : "<<hello_sv<<std::endl;
+
+    std::cout<<std::string_view("hello_sv")<<std::endl;
+
+
 
 
     return 0;

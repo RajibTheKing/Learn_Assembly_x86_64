@@ -196,8 +196,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     int (*solutions[number_of_solutions])(const char *, const char *, size_t);
 
     solutions[0] = compareCharByCharCaseInsensitive;
-    solutions[1] = i_case_compare_v1;
-    solutions[2] = i_case_compare_v2;
+    solutions[1] = ___i_case_compare_ordering;
+    solutions[2] = ___i_case_compare;
     solutions[3] = i_case_compare_v3;
     solutions[4] = i_case_compare_v4;
 
@@ -222,7 +222,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 10000; //length.size();
+    int testCase = 1000; //length.size();
     myfile<<testCase<<"\n";
 
     int kase = 1;
@@ -232,7 +232,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 
          /// Generate two strings with random characters
-        unsigned int len = 1000 + ANG::tools::random::next() % 331;
+        unsigned int len = 1 + ANG::tools::random::next() % 331;
         totalLength+=len;
         myfile<<len<<"\n";
         //myfile<<totalLength<<"\n"; //< cummulative

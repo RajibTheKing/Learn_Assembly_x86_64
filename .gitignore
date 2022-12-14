@@ -7,4 +7,12 @@
 test_assembly
 execution_time_data.txt
 table.md
+*.cflags
+*.config
+*.creator
+*.cxxflags
+*.files
+*.includes
+*.creator.user
+
 

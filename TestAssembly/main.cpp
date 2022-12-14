@@ -21,9 +21,9 @@ int compareCharByCharCaseInsensitive(const char *str1, const char* str2, size_t 
 
 int main()
 {
-    //AnalyzeSolution *analyzeSolution = new AnalyzeSolution();
+    AnalyzeSolution *analyzeSolution = new AnalyzeSolution();
 
-    // analyzeSolution->startAnaylizing();
+     analyzeSolution->startAnaylizing();
 
     // std::string str1 = "";
     // std::string str2 = "";
@@ -49,9 +49,6 @@ int main()
 //    printf("%X\n", x);
 
 
-    /// Checking less Compare
-    std::cout<<ANG::string::LessCompare::isLess("apples")("apple")<<std::endl;
-    std::cout<< (strcmp("apples", "apple") < 0) <<std::endl;
 
 
     return 0;

@@ -7,7 +7,7 @@ OBJFILES=main.o
 TARGET=test_std_library
 
 all:
-	$(CC) -c -g -Wall -fpermissive $(CPPFILES)
+	$(CC) -c -g -Wall $(CPPFILES)
 	$(CC) -o $(TARGET) $(OBJFILES)
 	
 clean:
