@@ -4,7 +4,7 @@
 */
 
 .section .text
-.global i_case_compare_v4                       # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
+.global i_case_compare_v4                       # parameters are in *str1 = rdi,  *str2 = rsi, len = rdx
 i_case_compare_v4:
     /* Prepare some constant */
     movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
@@ -21,9 +21,9 @@ head_loop:
     sub         $16,        %rdx                # check if all characters are compared
     jle         prepare_explicit_length         # ensures that all characters were matched
 
-    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+    movdqu      (%rdi),     %xmm10              # move first 128 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $16,         %rax               # increament the pointer by 16 bytes
+    add         $16,         %rdi               # increament 128 pointer by 16 bytes
     add         $16,         %rsi               # increament the pointer by 16 bytes
 
     /* Converting str1 to Lower */
@@ -63,12 +63,11 @@ prepare_explicit_length:
     jmp explicit_length_compare
 
 explicit_length_compare:
-    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
+    movdqu      (%rdi),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
     movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
 
 
-    push %rax                                   # Saving %rax in the Stack, because %rax,%rdx register is used for exlplicit length compare
-    movq $2, %rax                               # The length of %xmm12=0x5A41 is stored in %rax
+    movq $2, %rax                               # The length of %xmm12=0x5A41 is stored in %rdi
                                                 # The length of %xmm10 is stored in %rdx, pcmpestrm is ready to execute
 
     pcmpestrm   $0x44,      %xmm10, %xmm12
@@ -79,8 +78,6 @@ explicit_length_compare:
     pand        %xmm13,     %xmm0
     paddb       %xmm0,      %xmm11
 
-    /* Restore the value of %rax from the stack */
-    pop %rax
 
     cmp         $8,         %rdx
     jl part2

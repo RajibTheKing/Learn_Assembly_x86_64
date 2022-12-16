@@ -4,7 +4,7 @@
 */
 
 .section .text
-.global i_case_compare_v3                       # parameters are in *str1 = rax,  *str2 = rsi, len = rdx
+.global i_case_compare_v3                       # parameters are in *str1 = rdi,  *str2 = rsi, len = rdx
 i_case_compare_v3:
     /* Prepare some constant */
     movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
@@ -18,12 +18,11 @@ i_case_compare_v3:
     jle         return_result_match
 
 loop:
-    movdqu      (%rax),     %xmm10              # move first 64 bit of str1 to xmm10 register(SSE)
-    movdqu      (%rsi),     %xmm11              # move first 64 bit of str2 to xmm11 register(SSE)
-    add         $16,         %rax               # increament the pointer by 16 bytes
+    movdqu      (%rdi),     %xmm10              # move first 128 bit of str1 to xmm10 register(SSE)
+    movdqu      (%rsi),     %xmm11              # move first 128 bit of str2 to xmm11 register(SSE)
+    add         $16,         %rdi               # increament the pointer by 16 bytes
     add         $16,         %rsi               # increament the pointer by 16 bytes
 
-    push %rax
     movq $2, %rax
 
     /* Converting str1 to Lower */
@@ -45,8 +44,6 @@ loop:
     /* Check str1 and str2 are identical or not */
     pcmpestrm   $0x18,      %xmm10, %xmm11      # compare two sse register completely equal or not
 
-    /* Restore the value of %rax from the stack */
-    pop %rax
     jc         return_result_mismatch
     sub         $16,        %rdx
     jle         return_result_match

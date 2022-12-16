@@ -4,7 +4,7 @@
 */
 
 .section .text
-.global ___i_case_compare                                   /* parameters are in *str1 = rax, *str2 = rsi, len = rdx */
+.global ___i_case_compare                                   /* parameters are in *str1 = rdi, *str2 = rsi, len = rdx */
 ___i_case_compare:
     /* prepare some constant */
     movq        $0x5A41,        %r12                        /* A: 0x41, Z: 0x5A --> defining Range */
@@ -21,9 +21,9 @@ head_loop:
     sub         $16,            %rdx                        /* check if all characters are compared */
     jle         prepare_explicit_length                     /* ensures that all characters were matched */
 
-    movdqu      (%rax),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
+    movdqu      (%rdi),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
     movdqu      (%rsi),         %xmm11                      /* move 128 bit of str2 to xmm11 register(SSE) */
-    add         $16,            %rax                        /* increament the pointer by 16 bytes */
+    add         $16,            %rdi                        /* increament the pointer by 16 bytes */
     add         $16,            %rsi                        /* increament the pointer by 16 bytes */
 
     /* converting str1 to Lower */
@@ -46,12 +46,10 @@ prepare_explicit_length:
     jmp         explicit_length_compare
 
 explicit_length_compare:
-    movdqu      (%rax),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
+    movdqu      (%rdi),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
     movdqu      (%rsi),         %xmm11                      /* move 128 bit of str2 to xmm11 register(SSE) */
 
-    push        %rax                                        /* saving %rax in the Stack, because %rax,%rdx register is used for exlplicit length compare */
-    movq        $2,             %rax                        /* length of %xmm12=0x5A41 is stored in %rax and length of %xmm10 is stored in %rdx, pcmpestrm is ready to execute */
-
+    movq        $2,             %rax                        /* length of %xmm12=0x5A41 is stored in %rdi and length of %xmm10 is stored in %rdx, pcmpestrm is ready to execute */
     pcmpestrm   $0x44,          %xmm10,         %xmm12
     pand        %xmm13,         %xmm0
     paddb       %xmm0,          %xmm10
@@ -62,9 +60,6 @@ explicit_length_compare:
 
     movq        %rdx,           %rax
     pcmpestrm   $0x18,          %xmm10,         %xmm11      /* compare two sse register completely equal or not */
-
-    /* restore the value of %rax from the stack */
-    pop         %rax
 
     jnc         return_result_match
     jc          return_result_mismatch

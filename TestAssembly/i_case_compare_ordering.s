@@ -4,9 +4,12 @@
 */
 
 .section .text
-.global ___i_case_compare_ordering                          /* parameters are in *str1 = rax, *str2 = rsi, len = rdx */
+.global ___i_case_compare_ordering                          /* parameters are in *str1 = rdi, *str2 = rsi, len = rdx */
 ___i_case_compare_ordering:
     /* prepare some constant */
+    push %rdi
+    push %rsi
+    push %rdx
     movq        $0x5A41,        %r12                        /* A: 0x41, Z: 0x5A --> defining Range */
     movq        %r12,           %xmm12                      /* CHARACTER_RANGE */
 
@@ -21,9 +24,9 @@ head_loop:
     sub         $16,            %rdx                        /* check if all characters are compared */
     jle         prepare_explicit_length                     /* ensures that all characters were matched */
 
-    movdqu      (%rax),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
+    movdqu      (%rdi),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
     movdqu      (%rsi),         %xmm11                      /* move 128 bit of str2 to xmm11 register(SSE) */
-    add         $16,            %rax                        /* increament the pointer by 16 bytes */
+    add         $16,            %rdi                        /* increament the pointer by 16 bytes */
     add         $16,            %rsi                        # increament the pointer by 16 bytes
 
     /* converting str1 to Lower */
@@ -46,12 +49,10 @@ prepare_explicit_length:
     jmp         explicit_length_compare
 
 explicit_length_compare:
-    movdqu      (%rax),         %xmm10                      /* move first 128 bit of str1 to xmm10 register(SSE) */
+    movdqu      (%rdi),         %xmm10                      /* move first 128 bit of str1 to xmm10 register(SSE) */
     movdqu      (%rsi),         %xmm11                      /* move first 128 bit of str2 to xmm11 register(SSE) */
 
-    push        %rax
     movq        $2,             %rax
-
     pcmpestrm   $0x44,          %xmm10,         %xmm12
     pand        %xmm13,         %xmm0
     paddb       %xmm0,          %xmm10
@@ -62,20 +63,19 @@ explicit_length_compare:
 
     movq        %rdx,           %rax
     pcmpestrm   $0x18,          %xmm10,         %xmm11      /* compare two sse register completely equal or not */
-    pop         %rax
     jnc         return_result_match
     jc          tail_loop
 
 prepare_intermediate_mismatch:
-    sub         $16,            %rax
+    sub         $16,            %rdi
     sub         $16,            %rsi
     add         $16,            %rdx
     jmp         tail_loop
 
 tail_loop:
-    movb        (%rax),         %r13b
+    movb        (%rdi),         %r13b
     movb        (%rsi),         %r14b
-    add         $1,             %rax
+    add         $1,             %rdi
     add         $1,             %rsi
 
     /* convert single byte from str1 to lower */
@@ -104,8 +104,16 @@ compare:
 return_result_mismatch:
     movq        $0x00,          %rax
     mov         %r13b,          %al
+    pop %rdx
+    pop %rsi
+    pop %rdi
     ret
+    
 
 return_result_match:
     movq        $0x00,          %rax
+    pop %rdx
+    pop %rsi
+    pop %rdi
     ret
+
