@@ -1,16 +1,12 @@
 #ifndef UTILITY_H
 #define UTILITY_H
+#include <memory>
 #include "common.h"
 
-class Utility
+namespace Utility
 {
-public:
-    Utility();
-    void printArrayInHex(unsigned char *data, int len);
-    unsigned char* getRandomString(int len);
-    unsigned char* getDeepcopyString(unsigned char * str, unsigned int len);
-    unsigned char* getDeepcopyStringRandomizeCase(unsigned char *str, unsigned int len);
-    unsigned int compareCharByChar(unsigned char *str1, unsigned char* str2, unsigned int str1len, unsigned int str2len);
-};
+    std::string getRandomString(int len);
+    std::string getDeepcopyStringRandomizeCase(const std::string&, unsigned int len);
+}
 
 #endif // UTILITY_H

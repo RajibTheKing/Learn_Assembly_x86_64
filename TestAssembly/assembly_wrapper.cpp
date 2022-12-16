@@ -29,18 +29,18 @@ unsigned int AssemblyWrapper::getSum(unsigned int &a, unsigned int &b)
     return sum;
 }
 
-void AssemblyWrapper::packedSaturationTest(unsigned char *inData, unsigned char *outData)
+void AssemblyWrapper::packedSaturationTest(const char *inData, const char *outData)
 {
     packed_suturation_test(inData, outData);
 }
 
 
-unsigned int AssemblyWrapper::searchSubstr(unsigned char *inStr, unsigned char *subStr)
+unsigned int AssemblyWrapper::searchSubstr(const char *inStr, const char *subStr)
 {
     return search_substr(inStr, subStr);
 }
 
-unsigned int AssemblyWrapper::compareString(unsigned char *str1, unsigned char *str2, unsigned int str1Len, unsigned int str2Len)
+unsigned int AssemblyWrapper::compareString(const char *str1, const char *str2, unsigned int str1Len, unsigned int str2Len)
 {
     //return compare_string(str1, str2, str1Len, str2Len);
 

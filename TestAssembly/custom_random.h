@@ -1,9 +1,9 @@
 #ifndef ANG_TOOLS_RANDOM_H
 #define ANG_TOOLS_RANDOM_H
-#include "Macros.h"
 #include <cstdint>
 #include <limits>
 #include <random>
+#include "Macros.h"
 
 /// \see http://www.pcg-random.org/posts/developing-a-seed_seq-alternative.html
 /// as it inspired this whole namespace

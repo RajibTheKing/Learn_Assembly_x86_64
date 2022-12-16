@@ -8,23 +8,12 @@ extern int compareCharByCharCaseInsensitive(const char *str1, const char* str2, 
 class AnalyzeSolution
 {
 public:
-    AssemblyWrapper *assemblyWrapper = AssemblyWrapper::getInstance();
-    Utility *utility = nullptr;
-    std::ofstream myfile;
-
-    AnalyzeSolution();
-    ~AnalyzeSolution();
+    AnalyzeSolution() = default;
+    ~AnalyzeSolution() = default;
 
     void startAnaylizing();
 
-    void analyzeAdd();
-    void analyzeSaturation();
-    void analyzeSubstringSearch();
-    void analyzeStringCompare();
     void analyzeStringCompareCaseinsensitive();
-    void analyzeMovdqa();
-    std::string getNameBySolution(int n);
-    void showProgressBar(int totalElements, int alreadyCompleted);
 
 
 };

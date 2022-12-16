@@ -21,9 +21,9 @@ int compareCharByCharCaseInsensitive(const char *str1, const char* str2, size_t 
 
 int main()
 {
-    AnalyzeSolution *analyzeSolution = new AnalyzeSolution();
+    AnalyzeSolution analyzeSolution;
 
-     analyzeSolution->startAnaylizing();
+     analyzeSolution.startAnaylizing();
 
     // std::string str1 = "";
     // std::string str2 = "";
