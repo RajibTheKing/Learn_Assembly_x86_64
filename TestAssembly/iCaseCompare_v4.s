@@ -7,11 +7,11 @@
 .global i_case_compare_v4                       # parameters are in *str1 = rdi,  *str2 = rsi, len = rdx
 i_case_compare_v4:
     /* Prepare some constant */
-    movq        $0x5A41,     %r12               # A: 0x41, Z: 0x5A --> defining Range
-    movq        %r12,        %xmm12             # CHARACTER_RANGE
+    movq        $0x5A41,     %r11               # A: 0x41, Z: 0x5A --> defining Range
+    movq        %r11,        %xmm12             # CHARACTER_RANGE
 
-    movq        $0x20202020,       %r12         # Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
-    movq        %r12,        %xmm13             # moving diff to SSE register
+    movq        $0x20202020,       %r11         # Diff = 'a' - 'A' = 32 = x020, Prepare a doubleword value
+    movq        %r11,        %xmm13             # moving diff to SSE register
     pshufd      $0,          %xmm13,  %xmm13    # CHARACTER_DIFF
 
     cmp         $0,          %rdx
@@ -41,9 +41,9 @@ head_loop:
     /* Check str1 and str2 are identical or not */
 
     /* Firstly check lower 64 bit */
-    movq        %xmm10,     %r12
-    movq        %xmm11,     %r13
-    sub         %r12,       %r13
+    movq        %xmm10,     %r10
+    movq        %xmm11,     %r11
+    sub         %r10,       %r11
     jnz         return_result_mismatch
 
     /* move high 64 bits to low 64 bits. */
@@ -51,9 +51,9 @@ head_loop:
     movhlps     %xmm11,     %xmm11
 
     /* Now check upper 64 bit after mov */
-    movq        %xmm10,     %r12
-    movq        %xmm11,     %r13
-    sub         %r12,       %r13
+    movq        %xmm10,     %r10
+    movq        %xmm11,     %r11
+    sub         %r10,       %r11
     jnz         return_result_mismatch
     jz          head_loop
 
@@ -83,9 +83,9 @@ explicit_length_compare:
     jl part2
 part1:
     /* Firstly check lower 64 bit */
-    movq        %xmm10,     %r12
-    movq        %xmm11,     %r13
-    sub         %r12,       %r13
+    movq        %xmm10,     %r10
+    movq        %xmm11,     %r11
+    sub         %r10,       %r11
     jnz         return_result_mismatch
     sub $8, %rdx
     jz return_result_match
@@ -95,17 +95,17 @@ part1:
 
 part2:
 
-    movq        %xmm10,     %r12
-    movq        %xmm11,     %r13
+    movq        %xmm10,     %r10
+    movq        %xmm11,     %r11
 
     /* Prepare count and shift logically left to handle garbage */
     movq        $8,         %rcx
     sub         %rdx,       %rcx
     shlq        $3,         %rcx
 
-    shlq        %cl,        %r12
-    shlq        %cl,        %r13
-    sub         %r12,       %r13
+    shlq        %cl,        %r10
+    shlq        %cl,        %r11
+    sub         %r10,       %r11
     jnz         return_result_mismatch
     jz          return_result_match
 

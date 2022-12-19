@@ -188,13 +188,8 @@ void AnalyzeSolution::analyzeStringCompare()
 void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     printf("\nTesting: string comparison (Case-Insensitive)\n");
-    const char* lalla1 = "wrbQhDRoKYidSDrmWrsylbFAcyeDGXpLR"; //33
-    const char* lalla2 = "wRBQhDROKYidSDRmWrsyLBFAcyeDGXpLR";
-    auto cmpRes = ___i_case_compare_ordering(lalla1, lalla2, std::strlen(lalla1));
-    std::cout<<"cmpRes = "<<cmpRes<<std::endl;
-
 #if 1
-    int number_of_solutions = 2;
+    int number_of_solutions = 5;
     myfile<<number_of_solutions<<"\n";
     for(int i=0; i<number_of_solutions; i++){
         myfile<<getNameBySolution(i)<<"\n";
@@ -205,9 +200,9 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
     solutions[0] = compareCharByCharCaseInsensitive;
     solutions[1] = ___i_case_compare_ordering;
-    //solutions[2] = ___i_case_compare;
-    //solutions[3] = i_case_compare_v3;
-    //solutions[4] = i_case_compare_v4;
+    solutions[2] = ___i_case_compare;
+    solutions[3] = i_case_compare_v3;
+    solutions[4] = i_case_compare_v4;
 
 
     //solutions[0] = strncasecmp;
@@ -230,7 +225,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 1000; //length.size();
+    int testCase = 10000; //length.size();
     // myfile<<testCase<<"\n";
 
     int kase = 1;
@@ -240,7 +235,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
 
          /// Generate two strings with random characters
-        unsigned int len = 5;//1000 + ANG::tools::random::next() % 331;
+        unsigned int len = 1 + ANG::tools::random::next() % 331;
         totalLength+=len;
         // myfile<<len<<"\n";
         //myfile<<totalLength<<"\n"; //< cummulative
@@ -249,11 +244,11 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         unsigned char *str1 = utility->getRandomString(len);
         unsigned char *str2 = utility->getDeepcopyStringRandomizeCase(str1, len);
 
-//        /// change a random byte to make expected equal false
-//        unsigned int randomByte = ANG::tools::random::next() % len;
-//        int offset = 5 - (ANG::tools::random::next() % 10);
-//        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
-//        str2[randomByte] += offset;
+        /// change a random byte to make expected equal false
+        unsigned int randomByte = ANG::tools::random::next() % len;
+        int offset = 5 - (ANG::tools::random::next() % 10);
+        printf("Index: %d, Changing Single byte from %c to %c\n", randomByte, str2[randomByte], str2[randomByte] + offset);
+        str2[randomByte] += offset;
 
         /// print the starting address of both strings
         printf("Address of str1  = %p\n", str1);
@@ -270,16 +265,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         /// Start Checking the Results and Measuring Execution time for each solution
         for(int i=0; i<number_of_solutions; i++)
         {
-            printf("inside loop str1 = %s\n", str1);
-            printf("inside loop str2 = %s\n", str2);
             auto begin = std::chrono::high_resolution_clock::now();
-
-            printf("inside loop now str1 = %s\n", str1);
-            printf("inside loop now str2 = %s\n", str2);
-
             auto cmpRes = solutions[i](reinterpret_cast<const char*>(str1), reinterpret_cast<const char*>(str2), len);
-            printf("inside loop after call str1 = %s\n", str1);
-            printf("inside loop after call str2 = %s\n", str2);
             auto end = std::chrono::high_resolution_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 
@@ -289,8 +276,6 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             results[i] = results[i] > 127 ? results[i] - 256 : results[i];
 
             std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<results[i]<< std::endl;
-            printf("inside loop Execution time str1 = %s\n", str1);
-            printf("inside loop Execution time str2 = %s\n", str2);
 //            if(i)
 //            {
 //                myfile<<" "<<elapsed.count();
@@ -393,8 +378,8 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
         }
 
         // de-allocate memories
-//        delete[] str1;
-//        delete[] str2;
+        delete[] str1;
+        delete[] str2;
         kase++;
 
 //        /// show progress bar

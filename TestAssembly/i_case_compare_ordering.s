@@ -7,14 +7,11 @@
 .global ___i_case_compare_ordering                          /* parameters are in *str1 = rdi, *str2 = rsi, len = rdx */
 ___i_case_compare_ordering:
     /* prepare some constant */
-    push %rdi
-    push %rsi
-    push %rdx
-    movq        $0x5A41,        %r12                        /* A: 0x41, Z: 0x5A --> defining Range */
-    movq        %r12,           %xmm12                      /* CHARACTER_RANGE */
+    movq        $0x5A41,        %r11                        /* A: 0x41, Z: 0x5A --> defining Range */
+    movq        %r11,           %xmm12                      /* CHARACTER_RANGE */
 
-    movq        $0x20202020,                    %r12        /* diff = 'a' - 'A' = 32 = x020, prepare a doubleword value */
-    movq        %r12,           %xmm13                      /* moving diff to SSE register */
+    movq        $0x20202020,                    %r11        /* diff = 'a' - 'A' = 32 = x020, prepare a doubleword value */
+    movq        %r11,           %xmm13                      /* moving diff to SSE register */
     pshufd      $0,             %xmm13,         %xmm13      /* CHARACTER_DIFF */
 
     cmp         $0,             %rdx
@@ -73,29 +70,29 @@ prepare_intermediate_mismatch:
     jmp         tail_loop
 
 tail_loop:
-    movb        (%rdi),         %r13b
-    movb        (%rsi),         %r14b
+    movb        (%rdi),         %r11b
+    movb        (%rsi),         %r10b
     add         $1,             %rdi
     add         $1,             %rsi
 
     /* convert single byte from str1 to lower */
 str1:
-    cmp         $0x41,          %r13b
+    cmp         $0x41,          %r11b
     jl          str2
-    cmp         $0x5A,          %r13b
+    cmp         $0x5A,          %r11b
     jg          str2
-    add         $32,            %r13b
+    add         $32,            %r11b
 
     /* convert single byte from str2 to lower */
 str2:
-    cmp         $0x41,          %r14b
+    cmp         $0x41,          %r10b
     jl          compare
-    cmp         $0x5A,          %r14b
+    cmp         $0x5A,          %r10b
     jg          compare
-    add         $32,            %r14b
+    add         $32,            %r10b
 
 compare:
-    sub         %r14b,          %r13b
+    sub         %r10b,          %r11b
     jnz         return_result_mismatch
     sub         $1,             %rdx
     jnz         tail_loop
@@ -103,17 +100,10 @@ compare:
 
 return_result_mismatch:
     movq        $0x00,          %rax
-    mov         %r13b,          %al
-    pop %rdx
-    pop %rsi
-    pop %rdi
+    mov         %r11b,          %al
     ret
-    
 
 return_result_match:
     movq        $0x00,          %rax
-    pop %rdx
-    pop %rsi
-    pop %rdi
     ret
 

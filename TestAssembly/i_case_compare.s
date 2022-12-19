@@ -7,11 +7,11 @@
 .global ___i_case_compare                                   /* parameters are in *str1 = rdi, *str2 = rsi, len = rdx */
 ___i_case_compare:
     /* prepare some constant */
-    movq        $0x5A41,        %r12                        /* A: 0x41, Z: 0x5A --> defining Range */
-    movq        %r12,           %xmm12                      /* CHARACTER_RANGE */
+    movq        $0x5A41,        %r11                        /* A: 0x41, Z: 0x5A --> defining Range */
+    movq        %r11,           %xmm12                      /* CHARACTER_RANGE */
 
-    movq        $0x20202020,    %r12                        /* diff = 'a' - 'A' = 32 = x020, prepare a doubleword value */
-    movq        %r12,           %xmm13                      /* moving diff to SSE register */
+    movq        $0x20202020,    %r11                        /* diff = 'a' - 'A' = 32 = x020, prepare a doubleword value */
+    movq        %r11,           %xmm13                      /* moving diff to SSE register */
     pshufd      $0,             %xmm13,         %xmm13      /* CHARACTER_DIFF */
 
     cmp         $0,             %rdx
