@@ -5,7 +5,39 @@ TARGET=$1
 FILES=${@:2}
 echo $FILES
 CC=gcc
-CCFLAG="-std=c++20 -g -mrdrnd -Wall -o3"
+CCFLAG="-std=c++20 -g -mrdrnd -Wall -O3"
+# #RELEASE_MODE
+# CCFLAG="-std=c++20                                     \
+#         -fdiagnostics-color=always                     \
+#         -g                                             \
+#         -mrdrnd                                        \
+#         -Wall                                          \
+#         -Werror                                        \
+#         -Werror=switch                                 \
+#         -Wextra                                        \
+#         -Wfatal-errors                                 \
+#         -Wpedantic                                     \
+#         -Wno-deprecated-declarations                   \
+#         -Wno-missing-field-initializers                \
+#         -O3
+#         "
+
+#DEBUG_MODE
+# CCFLAG="-std=c++20 -fconstexpr-depth=2500                         \
+#         -fdiagnostics-color=always                     \
+#         -fvisibility=internal                          \
+#         -g                                             \
+#         -mrdrnd                                        \
+#         -Wall                                          \
+#         -Werror                                        \
+#         -Werror=switch                                 \
+#         -Wextra                                        \
+#         -Wfatal-errors                                 \
+#         -Wpedantic                                     \
+#         -Wno-deprecated-declarations                   \
+#         -Wno-missing-field-initializers                \
+#         -ftrapv                                        \
+#         -O0"
 INC=-I/
 
 

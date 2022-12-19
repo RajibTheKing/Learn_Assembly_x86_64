@@ -8,10 +8,13 @@ assembly_wrapper.h
 cType.inl
 common.h
 custom_random.h
+dependencies.sh
 iCaseCompare_v1.s
 iCaseCompare_v2.s
 iCaseCompare_v3.s
 iCaseCompare_v4.s
+i_case_compare.s
+i_case_compare_ordering.s
 main.cpp
 std.extensions.h
 utility.cpp

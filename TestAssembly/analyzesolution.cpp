@@ -27,10 +27,17 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 {
     auto* lalla1 = "zOLhmlfPPhzuDbJhDeGDJnXmIvupZWBsA";
     auto* lalla2 = "zOLhMlFPPHzuDbJhDEGDJNXmIvUpZWBSA";
-    printValues("asdasd", lalla1, lalla2);
-    auto asdasd = ___i_case_compare_ordering(lalla1, lalla2, std::strlen(lalla1));
+    printValues("lalla1 & lalla2: ", lalla1, lalla2);
+    auto firstRet = ___i_case_compare_ordering(lalla1, lalla2, std::strlen(lalla1));
+    std::cout << "firstRet: "<<firstRet << std::endl;
+    printValues("lalla1 & lalla2 (after):", lalla1, lalla2);
 
-    std::cout << asdasd << std::endl;
+    auto* eee = "zOLhmlfPPhzuDbJhDeGDJnXmIvupZWBsA";
+    auto* ddd = "zOLhMlFPPHzuDbJhDEGDJNXmIvUpZWBSA";
+    printValues("eee & ddd: ", eee, ddd);
+    auto secondRet = ___i_case_compare_ordering(eee, ddd, std::strlen(eee));
+    printValues("eee & ddd (after): ", eee, ddd);
+    std::cout<<"secondRet: "<<secondRet<<std::endl;
 
     std::cout << "Testing: string comparison (Case-Insensitive)" << std::endl;
 
@@ -52,7 +59,7 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
     for(int i=0; i<number_of_solutions; i++){
         totalTime[i]  = 0;
     }
-    int testCase = 1000;
+    int testCase = 2000;
 
     for(auto kase = 1; kase <= testCase; ++kase)
     {
@@ -84,7 +91,9 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
 
         /// show the strings again to check if the characters are modified after any funciton calls
         printValues("show the strings again", str1, str2);
+
     }
+
 }
 
 

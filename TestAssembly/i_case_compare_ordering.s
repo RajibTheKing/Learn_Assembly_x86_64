@@ -7,14 +7,11 @@
 .global ___i_case_compare_ordering                          /* parameters are in *str1 = rdi, *str2 = rsi, len = rdx */
 ___i_case_compare_ordering:
     /* prepare some constant */
-#    push %rdi
-#    push %rsi
-#    push %rdx
-    movq        $0x5A41,        %r12                        /* A: 0x41, Z: 0x5A --> defining Range */
-    movq        %r12,           %xmm12                      /* CHARACTER_RANGE */
+    movq        $0x5A41,        %r11                        /* A: 0x41, Z: 0x5A --> defining Range */
+    movq        %r11,           %xmm12                      /* CHARACTER_RANGE */
 
-    movq        $0x20202020,                    %r12        /* diff = 'a' - 'A' = 32 = x020, prepare a doubleword value */
-    movq        %r12,           %xmm13                      /* moving diff to SSE register */
+    movq        $0x20202020,                    %r11        /* diff = 'a' - 'A' = 32 = x020, prepare a doubleword value */
+    movq        %r11,           %xmm13                      /* moving diff to SSE register */
     pshufd      $0,             %xmm13,         %xmm13      /* CHARACTER_DIFF */
 
     cmp         $0,             %rdx
@@ -27,7 +24,7 @@ head_loop:
     movdqu      (%rdi),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
     movdqu      (%rsi),         %xmm11                      /* move 128 bit of str2 to xmm11 register(SSE) */
     add         $16,            %rdi                        /* increament the pointer by 16 bytes */
-    add         $16,            %rsi                        # increament the pointer by 16 bytes
+    add         $16,            %rsi                        /* increament the pointer by 16 bytes */
 
     /* converting str1 to Lower */
     pcmpistrm   $0x44,          %xmm10,         %xmm12      /* MASK: compare characters is in range A <= c <= Z and store result bytes in xmm0 */
@@ -104,16 +101,9 @@ compare:
 return_result_mismatch:
     movq        $0x00,          %rax
     mov         %r13b,          %al
-#    pop %rdx
-#    pop %rsi
-#    pop %rdi
     ret
-
 
 return_result_match:
     movq        $0x00,          %rax
-#    pop %rdx
-#    pop %rsi
-#    pop %rdi
     ret
 
