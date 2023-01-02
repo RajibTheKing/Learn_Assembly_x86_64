@@ -28,9 +28,11 @@ void AnalyzeSolution::startAnaylizing()
 
     //this->analyzeStringCompare();
 
-    this->analyzeStringCompareCaseinsensitive();
+    //this->analyzeStringCompareCaseinsensitive();
 
     //this->analyzeMovdqa();
+
+    this->analyze_strichr();
 
 }
 
@@ -70,6 +72,17 @@ std::string AnalyzeSolution::getNameBySolution(int n){
         break;
     default:
         return "No Solution by this number";
+        break;
+    }
+}
+
+std::string AnalyzeSolution::getNameBySolution_strichr(int n){
+    switch (n){
+    case 0:
+        return "C++ Naive Solution";
+        break;
+    default:
+        return "No solution by this number";
         break;
     }
 }
@@ -276,15 +289,15 @@ void AnalyzeSolution::analyzeStringCompareCaseinsensitive()
             results[i] = results[i] > 127 ? results[i] - 256 : results[i];
 
             std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution(i)<<") --> "<<results[i]<< std::endl;
-//            if(i)
-//            {
-//                myfile<<" "<<elapsed.count();
-//                //myfile<<" "<<totalTime[i]; //< cummulative
-//            }
-//            else
-//            {   myfile<<elapsed.count();
-//                //myfile<<totalTime[i]; //< cummulative
-//            }
+            if(i)
+            {
+                myfile<<" "<<elapsed.count();
+                //myfile<<" "<<totalTime[i]; //< cummulative
+            }
+            else
+            {   myfile<<elapsed.count();
+                //myfile<<totalTime[i]; //< cummulative
+            }
 
         }
         // myfile<<"\n";
@@ -461,4 +474,130 @@ void AnalyzeSolution::analyzeMovdqa()
 //    }
 }
 
+
+/*  TEST: Character search in string(case Insensitive)
+*   Let's try find first occurance of given character
+*/
+void AnalyzeSolution::analyze_strichr()
+{
+
+    printf("\nTesting: Character search in string(case Insensitive)\n");
+#if 1
+    int number_of_solutions = 1;
+    myfile<<number_of_solutions<<"\n";
+    for(int i=0; i<number_of_solutions; i++){
+        myfile<<getNameBySolution_strichr(i)<<"\n";
+    }
+
+    //Initialize Function Pointer for all solutions
+    const char* (*solutions[number_of_solutions])(const char *, int target);
+
+    solutions[0] = strchrCaseInsensitive;
+
+    long long totalTime[number_of_solutions];
+
+
+    for(int i=0; i<number_of_solutions; i++){
+        totalTime[i]  = 0;
+    }
+    long long totalLength = 0;
+//    double totalTimeReal[number_of_solutions];
+//    int numberOfRepeatition = 10000;
+
+    const char* results[number_of_solutions];
+//    std::vector<unsigned int> length;
+//    unsigned int startingLength = 10000;
+//    for(int i=0; i<100; i++){
+//        length.push_back(startingLength);
+//        startingLength+=50000;
+//    }
+    int testCase = 10; //length.size();
+    // myfile<<testCase<<"\n";
+
+    int kase = 1;
+
+    while(kase <= testCase)
+    {
+
+
+         /// Generate two strings with random characters
+        unsigned int len = 1 + ANG::tools::random::next() % 91;
+        totalLength+=len;
+        // myfile<<len<<"\n";
+        //myfile<<totalLength<<"\n"; //< cummulative
+
+        printf("String Len selected = %d\n", len);
+        unsigned char *str = utility->getRandomString(len);
+        int target = 0;
+
+        /// select a random character (upper or lower)
+        unsigned int randomCase = ANG::tools::random::next() % 2;
+        if(randomCase){
+            target +='a';
+        }else{
+            target+='A';
+        }
+        unsigned int randomChar = ANG::tools::random::next() % 26;
+        target += randomChar;
+
+
+        /// print the starting address if string
+        printf("Address of str  = %p\n", str);
+
+
+        /// if the length is less then 100 then show the strings on console output
+        if(len <= 100)
+        {
+            std::cout<<"Str = "<<str<<std::endl;
+            printf("target = %d\n", target);
+        }
+
+
+        /// Start Checking the Results and Measuring Execution time for each solution
+        for(int i=0; i<number_of_solutions; i++)
+        {
+            auto begin = std::chrono::high_resolution_clock::now();
+            auto cmpRes = solutions[i](reinterpret_cast<const char*>(str), target);
+            auto end = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+
+            totalTime[i] += elapsed.count();
+            results[i] = cmpRes;
+
+            std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution_strichr(i)<<") --> ";
+            printf("%p\n", results[i]);
+            if(i)
+            {
+                myfile<<" "<<elapsed.count();
+                //myfile<<" "<<totalTime[i]; //< cummulative
+            }
+            else
+            {   myfile<<elapsed.count();
+                //myfile<<totalTime[i]; //< cummulative
+            }
+
+        }
+        // myfile<<"\n";
+
+        // de-allocate memories
+        delete[] str;
+        kase++;
+
+//        /// show progress bar
+//        showProgressBar(testCase, kase);
+    }
+
+
+    printf("\nTotal Char Length checked: %lld\n", totalLength);
+    for(int i=0; i<number_of_solutions; i++){
+        printf("Total time needed %lld --> (%s)\n", totalTime[i], getNameBySolution(i).c_str());
+    }
+
+    myfile.close();
+#endif
+
+
+
+}
 

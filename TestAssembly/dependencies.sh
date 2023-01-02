@@ -5,7 +5,7 @@ TARGET=$1
 FILES=${@:2}
 echo $FILES
 CC=gcc
-CCFLAG="-std=c++20 -g -mrdrnd -Wall -O3"
+CCFLAG="-std=c++20 -g -mrdrnd -Wall -O0"
 INC=-I/
 
 

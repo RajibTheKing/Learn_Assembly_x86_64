@@ -70,29 +70,29 @@ prepare_intermediate_mismatch:
     jmp         tail_loop
 
 tail_loop:
-    movb        (%rdi),         %r11b
-    movb        (%rsi),         %r10b
+    movb        (%rdi),         %r13b
+    movb        (%rsi),         %r14b
     add         $1,             %rdi
     add         $1,             %rsi
 
     /* convert single byte from str1 to lower */
 str1:
-    cmp         $0x41,          %r11b
+    cmp         $0x41,          %r13b
     jl          str2
-    cmp         $0x5A,          %r11b
+    cmp         $0x5A,          %r13b
     jg          str2
-    add         $32,            %r11b
+    add         $32,            %r13b
 
     /* convert single byte from str2 to lower */
 str2:
-    cmp         $0x41,          %r10b
+    cmp         $0x41,          %r14b
     jl          compare
-    cmp         $0x5A,          %r10b
+    cmp         $0x5A,          %r14b
     jg          compare
-    add         $32,            %r10b
+    add         $32,            %r14b
 
 compare:
-    sub         %r10b,          %r11b
+    sub         %r14b,          %r13b
     jnz         return_result_mismatch
     sub         $1,             %rdx
     jnz         tail_loop
@@ -100,7 +100,7 @@ compare:
 
 return_result_mismatch:
     movq        $0x00,          %rax
-    mov         %r11b,          %al
+    mov         %r13b,          %al
     ret
 
 return_result_match:

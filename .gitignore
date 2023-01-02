@@ -14,5 +14,6 @@ table.md
 *.files
 *.includes
 *.creator.user
+*.out
 
 

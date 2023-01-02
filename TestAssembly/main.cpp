@@ -18,6 +18,18 @@ int compareCharByCharCaseInsensitive(const char *str1, const char* str2, size_t 
     return 0; // no mismatch
 }
 
+const char* strchrCaseInsensitive(const char *str, int target)
+{
+    int len = strlen(str);
+    for(int i=0; i<len; i++)
+    {
+        if(tolower(str[i]) == tolower(target))
+        {
+            return str+i; //< Found, return address of first occurence
+        }
+    }
+    return nullptr; //< Not Found, return nullptr
+}
 
 int main()
 {
