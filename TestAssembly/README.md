@@ -193,7 +193,7 @@
     | Output: Input + toAdd | o     | n     | c     | e     |       | u     | p     | o     | n     |       | a     |       | t     | i     | m     | e     |
 
 - Here given the execution time (in Nanoseconds) C++ vs Assembly:
- [click here to view data](table_paragraph_test(28-Oct-2022).md)
+ [click here to view data](./benchmark_data/table_paragraph_test(28-Oct-2022).md)
 
   
 - Here showing the graph using Naive and pcmpistrm + pcmpestrm + ordering (Time: 28 October, 2022)
@@ -201,7 +201,7 @@
 
 
 - Here given the execution time (in Nanoseconds) among different assembly approaches:
- [click here to view data](table_paragraph_test(17-11-2022).md)
+ [click here to view data](./benchmark_data/table_paragraph_test(17-11-2022).md)
 
 - Here showing the graph with all approaches (Time: 17 November, 2022, 15:03)
 ![alt text](../images/Graph_Execution_Time_17112022.png)
@@ -212,28 +212,28 @@
 
 
 - Now Check only 15 byte string, all execution times are cumulative sum:
-[click here to view data](table_16_byte_test(17_11_2022).md)
+[click here to view data](./benchmark_data/table_16_byte_test(17_11_2022).md)
  
 - Here showing the graph with all approaches only for 15 bytes of character also randomly changed a byte to force mismatch (Time: 18 November, 2022, 12:58)
 ![alt text](../images/Graph_Execution_Time_15byte.png)
 
 - After removing superfluous operation (extra sub operation just to check ZFlag) 16 byte test (21-11-2022):
-[click here to view data](table_16_byte_test(21-11-2022).md)
+[click here to view data](./benchmark_data/table_16_byte_test(21-11-2022).md)
 ![alt text](../images/Graph_Execution_Time_15byte(21-11-2022).png)
 
 
 - After removing superfluous operation (extra sub operation just to check ZFlag) 64 byte test (21-11-2022):
-[click here to view data](table_64_byte_test(21-11-2022).md)
+[click here to view data](./benchmark_data/table_64_byte_test(21-11-2022).md)
 ![alt text](../images/Graph_Execution_Time_64byte(21-11-2022).png)
 
 - 1 to 64 bytes test with all approach (23-Nov-2022):
-[click here to view data](table_1_to_64_bytes_test(23-Nov-2022).md)
+[click here to view data](./benchmark_data/table_1_to_64_bytes_test(23-Nov-2022).md)
 ![alt text](../images/Graph_Execution_Time_1_To_64(23-Nov-2022).png)
 
 - 1 to 64 bytes test (Cummulative Sum)with all approach (23-Nov-2022):
-[click here to view data](table_1_to_64_bytes_test_Cumulative(23-Nov-2022).md)
+[click here to view data](./benchmark_data/table_1_to_64_bytes_test_Cumulative(23-Nov-2022).md)
 ![alt text](../images/Grpah_Execution_Time_1_To_64_Cumulative(23-Nov-2022).png)
 
 - 1 to 64 bytes test With 10,000 repeatition and average execution time (24-Nov-2022):
-[click here to view data](table_1_to_64_bytes_test_10000_rep(24_Nov_2022).md)
+[click here to view data](./benchmark_data/table_1_to_64_bytes_test_10000_rep(24_Nov_2022).md)
 ![alt text](../images/Graph_Execution_Time_1_64_10000_Rep(24-Nov-2022).png)
