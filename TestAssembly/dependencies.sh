@@ -17,7 +17,9 @@ for file in $FILES ; do
     echo $cmd
     $cmd
 done
-OBJFILES=$(echo ./*.o)
+OBJ1=$(echo ./*.o)
+OBJ2=$(echo ./assembly/*.o)
+OBJFILES="$OBJ1 $OBJ2"
 cmd="$CC $OBJFILES -lstdc++ -o $TARGET"
 echo $cmd
 $cmd

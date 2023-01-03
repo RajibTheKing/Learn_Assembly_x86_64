@@ -1,10 +1,11 @@
 NASM=nasm
 NASMFILES=utility_functions.asm
-GASFILES=$(shell echo ./*.s| tr ' ' '\n')
+GASFILES=$(shell echo ./assembly/*.s| tr ' ' '\n')
 
 CPPFILES=$(shell echo ./*.cpp| tr ' ' '\n')
 
-OBJFILES=$(shell echo ./*.o| tr ' ' '\n')
+OBJFILES=$(shell echo ./*.o| tr ' ' '\n') \
+         $(shell echo ./assembly/*.o | tr ' ' '\n')
 
 TARGET=test_assembly
 
@@ -13,4 +14,4 @@ all:
 	@nice ./dependencies.sh $(TARGET) $(GASFILES) $(CPPFILES)
 	
 clean:
-	rm -f $(OBJFILES) $(TARGET) *~
+	rm -rf $(OBJFILES) $(TARGET) *~
