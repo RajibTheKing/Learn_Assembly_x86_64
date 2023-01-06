@@ -483,7 +483,7 @@ void AnalyzeSolution::analyze_strichr()
 
     printf("\nTesting: Character search in string(case Insensitive)\n");
 #if 1
-    int number_of_solutions = 1;
+    int number_of_solutions = 2;
     myfile<<number_of_solutions<<"\n";
     for(int i=0; i<number_of_solutions; i++){
         myfile<<getNameBySolution_strichr(i)<<"\n";
@@ -493,6 +493,7 @@ void AnalyzeSolution::analyze_strichr()
     const char* (*solutions[number_of_solutions])(const char *, int target);
 
     solutions[0] = strchrCaseInsensitive;
+    solutions[1] = ___i_str_chr;
 
     long long totalTime[number_of_solutions];
 
@@ -511,22 +512,25 @@ void AnalyzeSolution::analyze_strichr()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 10; //length.size();
+    int testCase = 1000; //length.size();
     // myfile<<testCase<<"\n";
 
     int kase = 1;
 
     while(kase <= testCase)
     {
+        printf("\n\nCase %d:\n", kase);
 
 
          /// Generate two strings with random characters
-        unsigned int len = 1 + ANG::tools::random::next() % 91;
+        unsigned int len = 1 + ANG::tools::random::next() % 41;
         totalLength+=len;
         // myfile<<len<<"\n";
         //myfile<<totalLength<<"\n"; //< cummulative
 
         printf("String Len selected = %d\n", len);
+        //unsigned char inputStr[] = "Once Upon A TimE in smartClip europe Gmbh";
+        //unsigned char inputStr[] = "jCUvQZHsFuXWUoGRkFJwrdifdmNSkuThllQwgmXe0";
         unsigned char *str = utility->getRandomString(len);
         int target = 0;
 
@@ -540,6 +544,8 @@ void AnalyzeSolution::analyze_strichr()
         unsigned int randomChar = ANG::tools::random::next() % 26;
         target += randomChar;
 
+        //target = 'T';
+
 
         /// print the starting address if string
         printf("Address of str  = %p\n", str);
@@ -549,7 +555,7 @@ void AnalyzeSolution::analyze_strichr()
         if(len <= 100)
         {
             std::cout<<"Str = "<<str<<std::endl;
-            printf("target = %d\n", target);
+            printf("target = %c\n", target);
         }
 
 
@@ -577,6 +583,11 @@ void AnalyzeSolution::analyze_strichr()
                 //myfile<<totalTime[i]; //< cummulative
             }
 
+        }
+
+        if(results[0] != results[1]){
+            printf("Mismatch Found!!!!!!!!!!!\n");
+            break;
         }
         // myfile<<"\n";
 

@@ -49,7 +49,7 @@ explicit_length_compare:
     movdqu      (%rdi),         %xmm10                      /* move 128 bit of str1 to xmm10 register(SSE) */
     movdqu      (%rsi),         %xmm11                      /* move 128 bit of str2 to xmm11 register(SSE) */
 
-    movq        $2,             %rax                        /* length of %xmm12=0x5A41 is stored in %rdi and length of %xmm10 is stored in %rdx, pcmpestrm is ready to execute */
+    movq        $2,             %rax                        /* length of %xmm12=0x5A41 is stored in %rax and length of %xmm10 is stored in %rdx, pcmpestrm is ready to execute */
     pcmpestrm   $0x44,          %xmm10,         %xmm12
     pand        %xmm13,         %xmm0
     paddb       %xmm0,          %xmm10

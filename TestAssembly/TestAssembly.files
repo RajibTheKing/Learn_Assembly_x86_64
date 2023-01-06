@@ -3,6 +3,12 @@ Macros.h
 Makefile
 analyzesolution.cpp
 analyzesolution.h
+assembly/iCaseCompare_v3.s
+assembly/iCaseCompare_v4.s
+assembly/i_case_compare.s
+assembly/i_case_compare_ordering.s
+assembly/i_str_chr.s
+assembly/utility_functions_GAS.s
 assembly_wrapper.cpp
 assembly_wrapper.h
 cType.inl
@@ -11,7 +17,6 @@ custom_random.h
 dependencies.sh
 iCaseCompare_v3.s
 iCaseCompare_v4.s
-i_case_compare.s
 i_case_compare_ordering.s
 main.cpp
 std.extensions.h

@@ -18,6 +18,8 @@ extern "C"
     int ___i_case_compare(const char *lhs, const char *rhs, size_t len);
     int i_case_compare_v3(const char *lhs, const char *rhs, size_t len);
     int i_case_compare_v4(const char *lhs, const char *rhs, size_t len);
+
+    const char* ___i_str_chr(const char* str, int target);
 }
 
 class AssemblyWrapper{
