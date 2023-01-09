@@ -81,6 +81,9 @@ std::string AnalyzeSolution::getNameBySolution_strichr(int n){
     case 0:
         return "C++ Naive Solution";
         break;
+    case 1:
+        return "i_str_chr";
+        break;
     default:
         return "No solution by this number";
         break;
@@ -482,6 +485,25 @@ void AnalyzeSolution::analyze_strichr()
 {
 
     printf("\nTesting: Character search in string(case Insensitive)\n");
+    std::vector<std::pair<std::string, int>> sampleTestcases;
+
+    /// len < 16
+    sampleTestcases.push_back(std::make_pair("Once Upon", 'z'));  //< not found scenario
+    sampleTestcases.push_back(std::make_pair("Once Upon", 'p'));  //< found scenario
+    sampleTestcases.push_back(std::make_pair("Once Upon", 'u'));  //< found scenario (Case Insensitive)
+
+    /// len = 16
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time", 'Z'));  //< not found scenario
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time", 'e'));  //< found scenario
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time", 'E'));  //< found scenario (Case Insensitive)
+
+    /// len > 16, len > 32
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time In Germany", 'Z'));  //< len > 16, not found
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time In Germany, there were three little birds. ", 'Z'));  //< len > 32, not found
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time In Germany", 'y'));  //< len > 16, Found
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time In Germany", 'Y'));  //< len > 16, Found (Case Insensitive)
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time In Germany, there were three little birds.", 'd'));  //< len > 32, Found
+    sampleTestcases.push_back(std::make_pair("Once Upon A Time In Germany, there were three little birds.", 'D'));  //< len > 32, Found (Case Insensitive)
 #if 1
     int number_of_solutions = 2;
     myfile<<number_of_solutions<<"\n";
@@ -512,12 +534,12 @@ void AnalyzeSolution::analyze_strichr()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = 1000; //length.size();
+    int testCase = sampleTestcases.size(); //length.size();
     // myfile<<testCase<<"\n";
 
-    int kase = 1;
+    int kase = 0;
 
-    while(kase <= testCase)
+    while(kase < testCase)
     {
         printf("\n\nCase %d:\n", kase);
 
@@ -529,22 +551,20 @@ void AnalyzeSolution::analyze_strichr()
         //myfile<<totalLength<<"\n"; //< cummulative
 
         printf("String Len selected = %d\n", len);
-        //unsigned char inputStr[] = "Once Upon A TimE in smartClip europe Gmbh";
-        //unsigned char inputStr[] = "jCUvQZHsFuXWUoGRkFJwrdifdmNSkuThllQwgmXe0";
-        unsigned char *str = utility->getRandomString(len);
+        const char *str = sampleTestcases[kase].first.c_str(); // utility->getRandomString(len);
         int target = 0;
 
-        /// select a random character (upper or lower)
-        unsigned int randomCase = ANG::tools::random::next() % 2;
-        if(randomCase){
-            target +='a';
-        }else{
-            target+='A';
-        }
-        unsigned int randomChar = ANG::tools::random::next() % 26;
-        target += randomChar;
+//        /// select a random character (upper or lower)
+//        unsigned int randomCase = ANG::tools::random::next() % 2;
+//        if(randomCase){
+//            target +='a';
+//        }else{
+//            target+='A';
+//        }
+//        unsigned int randomChar = ANG::tools::random::next() % 26;
+//        target += randomChar;
 
-        //target = 'T';
+        target = sampleTestcases[kase].second;
 
 
         /// print the starting address if string
@@ -572,7 +592,7 @@ void AnalyzeSolution::analyze_strichr()
             results[i] = cmpRes;
 
             std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution_strichr(i)<<") --> ";
-            printf("%p\n", results[i]);
+            printf("%p, diff = %ld\n", results[i], results[i] - str);
             if(i)
             {
                 myfile<<" "<<elapsed.count();
@@ -588,11 +608,13 @@ void AnalyzeSolution::analyze_strichr()
         if(results[0] != results[1]){
             printf("Mismatch Found!!!!!!!!!!!\n");
             break;
+        }else{
+            printf("It'a a Match (OK)\n");
         }
         // myfile<<"\n";
 
         // de-allocate memories
-        delete[] str;
+        //delete[] str;
         kase++;
 
 //        /// show progress bar
@@ -602,7 +624,7 @@ void AnalyzeSolution::analyze_strichr()
 
     printf("\nTotal Char Length checked: %lld\n", totalLength);
     for(int i=0; i<number_of_solutions; i++){
-        printf("Total time needed %lld --> (%s)\n", totalTime[i], getNameBySolution(i).c_str());
+        printf("Total time needed %lld --> (%s)\n", totalTime[i], getNameBySolution_strichr(i).c_str());
     }
 
     myfile.close();
