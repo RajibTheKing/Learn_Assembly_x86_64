@@ -534,7 +534,7 @@ void AnalyzeSolution::analyze_strichr()
 //        length.push_back(startingLength);
 //        startingLength+=50000;
 //    }
-    int testCase = sampleTestcases.size(); //length.size();
+    int testCase = 10000; //length.size();
     // myfile<<testCase<<"\n";
 
     int kase = 0;
@@ -545,26 +545,27 @@ void AnalyzeSolution::analyze_strichr()
 
 
          /// Generate two strings with random characters
-        unsigned int len = 1 + ANG::tools::random::next() % 41;
+        unsigned int len = 1 + ANG::tools::random::next() % 331;
         totalLength+=len;
         // myfile<<len<<"\n";
         //myfile<<totalLength<<"\n"; //< cummulative
 
         printf("String Len selected = %d\n", len);
-        const char *str = sampleTestcases[kase].first.c_str(); // utility->getRandomString(len);
+//        const char *str = sampleTestcases[kase].first.c_str();
+        unsigned char *str = utility->getRandomString(len);
         int target = 0;
 
-//        /// select a random character (upper or lower)
-//        unsigned int randomCase = ANG::tools::random::next() % 2;
-//        if(randomCase){
-//            target +='a';
-//        }else{
-//            target+='A';
-//        }
-//        unsigned int randomChar = ANG::tools::random::next() % 26;
-//        target += randomChar;
+        /// select a random character (upper or lower)
+        unsigned int randomCase = ANG::tools::random::next() % 2;
+        if(randomCase){
+            target +='a';
+        }else{
+            target+='A';
+        }
+        unsigned int randomChar = ANG::tools::random::next() % 26;
+        target += randomChar;
 
-        target = sampleTestcases[kase].second;
+//        target = sampleTestcases[kase].second;
 
 
         /// print the starting address if string
@@ -572,7 +573,7 @@ void AnalyzeSolution::analyze_strichr()
 
 
         /// if the length is less then 100 then show the strings on console output
-        if(len <= 100)
+        //if(len <= 100)
         {
             std::cout<<"Str = "<<str<<std::endl;
             printf("target = %c\n", target);
@@ -592,7 +593,7 @@ void AnalyzeSolution::analyze_strichr()
             results[i] = cmpRes;
 
             std::cout<<"Execution time measured: " << elapsed.count() << " Nanoseconds ("<<getNameBySolution_strichr(i)<<") --> ";
-            printf("%p, diff = %ld\n", results[i], results[i] - str);
+            printf("%p, diff = %ld\n", results[i], results[i] - reinterpret_cast<const char*>(str));
             if(i)
             {
                 myfile<<" "<<elapsed.count();
@@ -614,7 +615,7 @@ void AnalyzeSolution::analyze_strichr()
         // myfile<<"\n";
 
         // de-allocate memories
-        //delete[] str;
+        delete[] str;
         kase++;
 
 //        /// show progress bar

@@ -64,6 +64,17 @@ return_found:
     tzcnt       %eax,           %eax
     add         %rax,           %rdi
     add         %edx,           %eax
+    movq        %rax,           %r11                        /* Store matched position in r11 */
+
+    /* Special Case: Check if Match was actually after null terminator */
+    pxor        %xmm3,          %xmm3
+    pcmpeqb     %xmm4,          %xmm3
+    pmovmskb    %xmm3,          %eax
+    tzcnt       %eax,           %eax
+    add         %edx,           %eax
+    sub         %rax,           %r11
+    jge         return_not_found
+
     movq        %rdi,           %rax
     ret
 

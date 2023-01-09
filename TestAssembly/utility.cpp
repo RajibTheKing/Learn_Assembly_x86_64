@@ -16,14 +16,16 @@ void Utility::printArrayInHex(unsigned char *data, int len)
 
 
 unsigned char* Utility::getRandomString(int len){
-    unsigned char *str = new unsigned char[len];
+    unsigned char *str = new unsigned char[len + 1];
     int offset;
     for(int i=0; i<len; i++){
         int rand_case = (rand() % 2);
         rand_case ? offset = 'a' : offset = 'A';
         int rand_now = (rand() % 26) + offset;
         str[i] = rand_now;
+//        printf("rand_now = %c\n", rand_now);
     }
+    str[len] = 0; //null terminator
     return str;
 }
 
